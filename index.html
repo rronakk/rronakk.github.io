@@ -3,800 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Presentation: The Scalable Quality Blueprint (Forbes Style)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Forbes Official (Black, White, Blue) -->
-    <!-- Application Structure Plan: The application is designed as a linear, interactive presentation built from a single HTML file. It uses a "slide" metaphor, where each section element represents a slide. Navigation is controlled by "Next" and "Previous" buttons, with JavaScript managing the visibility of the current slide. A progress bar at the top provides visual feedback on the user's position within the presentation. The narrative flow mirrors the research document: starting with the problem (The Wake-Up Call), moving to the solution (The 4 Pillars), detailing each pillar with interactive charts and diagrams, presenting an actionable roadmap, and finishing with key takeaways. This structure is chosen to guide an audience through a complex topic in a clear, step-by-step manner, making it ideal for a live presentation. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: 23% Automation Effectiveness -> Goal: Inform/Hook -> Viz: Large KPI callout -> Justification: More impactful for a presentation slide than a full chart. -> Method: HTML/CSS.
-        - Report Info: Microservices Test Pyramid -> Goal: Organize/Hierarchy -> Viz: HTML/CSS Pyramid Diagram -> Justification: An interactive, custom-built diagram is more engaging for a presentation. -> Method: HTML/CSS with hover effects.
-        - Report Info: GenAI Adoption in QE -> Goal: Inform -> Viz: Donut Chart -> Justification: A clean, simple visual for a key adoption statistic. -> Library: Chart.js (Canvas).
-        - Report Info: TIA + Parallelization -> Goal: Compare -> Viz: Grouped Bar Chart -> Justification: The best way to show a stark before-and-after comparison. -> Library: Chart.js (Canvas).
-        - Report Info: Cost of Bugs -> Goal: Show Trend -> Viz: Line Chart (Log Scale) -> Justification: A line chart clearly shows the exponential trend across stages. -> Library: Chart.js (Canvas).
-        - Report Info: Maturity Roadmap -> Goal: Show Process -> Viz: HTML/CSS Timeline -> Justification: A standard and intuitive way to present a phased plan. -> Method: HTML/CSS.
-        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>Ronak Ray - VP of QA & AI Strategy</title>
     <style>
-        :root {
-            --forbes-black: #000000;
-            --forbes-dark-grey: #333333;
-            --forbes-blue: #0057ff;
-            --forbes-light-grey: #f2f2f2;
-            --forbes-white: #ffffff;
-            --font-headline: 'Lora', serif;
-            --font-body: 'Source Sans Pro', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body { 
-            font-family: var(--font-body); 
-            background-color: var(--forbes-white); 
-            color: var(--forbes-dark-grey);
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-headline);
-            color: var(--forbes-black);
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
-        .slide { display: none; }
-        .slide.active { display: block; }
-        .chart-container { position: relative; width: 100%; height: 80%; }
-        .slide-content { animation: fadeIn 0.6s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .pyramid-layer { clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%); text-align: center; color: white; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        .pyramid-layer:hover { filter: brightness(1.1); }
-        .btn-primary {
-            background-color: var(--forbes-blue);
-            color: var(--forbes-white);
-            font-weight: 700;
-            padding: 0.5rem 1.5rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 40px;
         }
-        .btn-primary:hover {
-            background-color: #0045cc;
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 10px;
         }
-        .btn-secondary {
-            background-color: var(--forbes-light-grey);
-            color: var(--forbes-black);
-            font-weight: 700;
-            padding: 0.5rem 1.5rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+
+        .title {
+            font-size: 1.5em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
-         .btn-secondary:hover:not(:disabled) {
-            background-color: #e0e0e0;
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
-        .btn-secondary:disabled {
-             opacity: 0.5;
-             cursor: not-allowed;
+
+        .contact-info a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s;
         }
-        .code-block {
-             background-color: #282c34;
-             color: #abb2bf;
-             padding: 1rem;
-             border-radius: 4px;
-             font-family: 'Courier New', Courier, monospace;
-             font-size: 0.875rem;
-             white-space: pre-wrap;
-             word-break: break-all;
+
+        .contact-info a:hover {
+            color: #764ba2;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .job {
+            margin-bottom: 30px;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .job-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .company {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .date {
+            color: #666;
+            font-style: italic;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .presentations-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .presentation-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .presentation-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .presentation-title {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .presentation-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .education {
+            margin-bottom: 20px;
+        }
+
+        .certification {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .summary {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.8;
         }
     </style>
 </head>
-<body class="flex flex-col h-screen">
+<body>
+    <div class="container">
+        <header>
+            <h1>Ronak Ray</h1>
+            <div class="title">Vice President of QA & AI Strategy</div>
+            <div class="contact-info">
+                <a href="mailto:ronak.ray@example.com">📧 ronak.ray@example.com</a>
+                <a href="https://linkedin.com/in/ronakray" target="_blank">💼 LinkedIn</a>
+                <a href="https://github.com/rronakk" target="_blank">💻 GitHub</a>
+                <a href="tel:+1234567890">📱 +1 (234) 567-8900</a>
+            </div>
+        </header>
 
-    <div id="progress-bar" class="w-full bg-gray-200 h-1.5">
-        <div id="progress" class="bg-[var(--forbes-blue)] h-1.5" style="width: 0%;"></div>
-    </div>
+        <section class="presentations-section">
+            <h2>📊 Featured Presentations & Talks</h2>
+            
+            <div class="presentation-card">
+                <div class="presentation-title">What AI Can Do, What Testers Must Do: Partnering with AI in Automation</div>
+                <div class="presentation-meta">📅 2025 • 🏢 Industry Conference • ⏱️ 45 minutes</div>
+                <p>Exploring the evolving role of QA professionals in the AI era, focusing on practical strategies for human-AI collaboration in test automation.</p>
+                <a href="presentations/ai-testing-talk.html" class="btn">View Presentation →</a>
+            </div>
 
-    <main id="presentation-container" class="flex-grow p-8 md:p-12 flex items-center justify-center">
+            <div class="presentation-card">
+                <div class="presentation-title">Building Quality at Scale: CI/CD Best Practices</div>
+                <div class="presentation-meta">📅 2024 • 🏢 DevOps Summit • ⏱️ 30 minutes</div>
+                <p>Strategies for implementing robust testing pipelines that enable rapid deployment without compromising quality.</p>
+                <a href="presentations/cicd-best-practices.html" class="btn">View Presentation →</a>
+            </div>
 
-        <!-- Slide 1: Title -->
-        <section class="slide active text-center">
-            <div class="slide-content">
-                <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-[var(--forbes-black)]">The Scalable Quality Blueprint</h1>
-                <p class="mt-4 text-2xl text-[var(--forbes-dark-grey)] font-light">Architecting Next-Generation Test Automation</p>
-                <div class="mt-12 border-t-4 border-t-[var(--forbes-blue)] w-24 mx-auto"></div>
-                <p class="mt-8 text-xl text-[var(--forbes-dark-grey)] font-semibold">Ronak Ray</p>
-                <p class="text-lg text-[var(--forbes-dark-grey)]">VP, Quality Assurance & AI Strategy, Forbes</p>
+            <div class="presentation-card">
+                <div class="presentation-title">The Future of Test Automation: AI & Machine Learning</div>
+                <div class="presentation-meta">📅 2024 • 🏢 QA Tech Conference • ⏱️ 60 minutes</div>
+                <p>Deep dive into emerging AI technologies transforming software testing, with real-world case studies from Forbes.</p>
+                <a href="presentations/future-automation.html" class="btn">View Presentation →</a>
             </div>
         </section>
-        
-        <!-- Slide 2: About Me -->
-        <section class="slide w-full max-w-6xl">
-            <div class="slide-content text-left">
-                 <h2 class="text-4xl font-bold text-center mb-8">About Me: Ronak Ray</h2>
-                <div class="flex flex-col md:flex-row items-center gap-12">
-                    <div class="md:w-3/5">
-                        <p class="text-lg text-[var(--forbes-dark-grey)] leading-relaxed">
-                            Ronak Ray is the Vice President of Quality Assurance and AI Strategy at Forbes, where he leads the evolution of quality engineering across the organization. With over a decade of experience in building scalable automation frameworks and driving digital transformation, Ronak has grown QA from the ground up into a high-impact team of 35+ engineers.
-                            <br><br>
-                            Under his leadership, Forbes achieved an <strong>85% automation coverage</strong> and accelerated release cycles by over <strong>20x</strong> through robust CI/CD practices. In his current role, Ronak also spearheads AI strategy, integrating generative AI into quality workflows to enhance test generation, flakiness detection, and release confidence. A strong advocate for shift-left testing, continuous delivery, and intelligent automation, Ronak blends deep technical expertise with a strategic vision for the future of software quality.
-                        </p>
+
+        <div class="content-grid">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Professional Summary</h2>
+                    <div class="summary">
+                        Strategic technology leader with 15+ years of experience driving quality assurance excellence and AI innovation in high-scale digital media environments. Proven track record of transforming QA organizations, implementing cutting-edge automation frameworks, and leading cross-functional teams to deliver exceptional software quality. Expert in bridging technical execution with business strategy.
                     </div>
-                    <div class="md:w-2/5 space-y-6">
-                        <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm text-center">
-                            <p class="text-6xl font-bold text-[var(--forbes-blue)]">10+</p>
-                            <h3 class="mt-1 text-xl font-bold">Years of Experience</h3>
+
+                    <h2>Professional Experience</h2>
+                    
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Vice President of QA & AI Strategy</div>
+                                <div class="company">Forbes Media</div>
+                            </div>
+                            <div class="date">2020 - Present</div>
                         </div>
-                        <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm text-center">
-                            <p class="text-6xl font-bold text-[var(--forbes-blue)]">35+</p>
-                            <h3 class="mt-1 text-xl font-bold">Engineers in QA Team</h3>
-                        </div>
-                        <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm text-center">
-                            <p class="text-6xl font-bold text-[var(--forbes-blue)]">20x</p>
-                            <h3 class="mt-1 text-xl font-bold">Faster Release Cycles</h3>
-                        </div>
+                        <ul>
+                            <li>Lead enterprise-wide QA transformation initiative serving 150M+ monthly users</li>
+                            <li>Architected and implemented AI-driven test automation framework, achieving 60% reduction in test execution time</li>
+                            <li>Increased release velocity by 5.7% while maintaining zero critical production defects</li>
+                            <li>Built and mentor a team of 25+ QA engineers across multiple global locations</li>
+                            <li>Established predictive quality analytics platform using ML models to identify high-risk code changes</li>
+                            <li>Drove adoption of self-healing test automation, reducing maintenance overhead by 40%</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 3: The Wake-up Call -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content text-center">
-                <h2 class="text-4xl font-bold">The Automation Crisis</h2>
-                <p class="mt-4 text-xl text-[var(--forbes-dark-grey)] max-w-3xl mx-auto">Traditional test automation is failing. The strategies that brought us here are no longer sufficient.</p>
-                <div class="mt-12 bg-[var(--forbes-white)] border border-gray-200 p-12 rounded-sm inline-block">
-                    <p class="text-8xl font-bold text-red-600">23%</p>
-                    <h3 class="mt-2 text-xl font-bold">Automation Effectiveness</h3>
-                    <p class="mt-1 text-base text-gray-500">(World Quality Report, 2023)</p>
-                </div>
-                 <p class="mt-8 text-lg text-[var(--forbes-dark-grey)]">This isn't a tooling problem. It's a symptom of brittle tests, eroded confidence, and a flawed strategy.</p>
-            </div>
-        </section>
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Director of Quality Engineering</div>
+                                <div class="company">Digital Media Company</div>
+                            </div>
+                            <div class="date">2016 - 2020</div>
+                        </div>
+                        <ul>
+                            <li>Transformed manual testing processes to 80% automated testing coverage</li>
+                            <li>Implemented continuous testing practices within CI/CD pipelines</li>
+                            <li>Reduced average defect escape rate by 65% through enhanced quality gates</li>
+                            <li>Led API testing strategy across 50+ microservices architecture</li>
+                            <li>Championed shift-left testing culture across engineering organization</li>
+                        </ul>
+                    </div>
 
-        <!-- Slide 4: The Objective -->
-        <section class="slide w-full max-w-4xl">
-            <div class="slide-content">
-                <div class="border-l-4 border-[var(--forbes-blue)] pl-6">
-                    <h2 class="text-4xl font-bold">The Objective</h2>
-                </div>
-                <div class="mt-8 text-xl space-y-6">
-                    <p class="text-2xl text-[var(--forbes-dark-grey)]">What is the primary purpose of writing automated tests?</p>
-                    <ul class="list-disc list-inside space-y-4 text-[var(--forbes-dark-grey)]">
-                        <li>Reduce manual testing time?</li>
-                        <li>Give feedback of test failure faster?</li>
-                        <li>Increase release velocity?</li>
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Senior QA Manager</div>
+                                <div class="company">Technology Solutions Inc.</div>
+                            </div>
+                            <div class="date">2012 - 2016</div>
+                        </div>
+                        <ul>
+                            <li>Managed QA team of 15 engineers for enterprise SaaS platform</li>
+                            <li>Designed and implemented comprehensive test automation framework using Selenium and Python</li>
+                            <li>Established performance testing practice, identifying critical bottlenecks before production</li>
+                            <li>Collaborated with product and engineering teams to define quality metrics and SLAs</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">QA Automation Engineer</div>
+                                <div class="company">Software Innovations LLC</div>
+                            </div>
+                            <div class="date">2009 - 2012</div>
+                        </div>
+                        <ul>
+                            <li>Developed automated test suites for web and mobile applications</li>
+                            <li>Created reusable testing frameworks and libraries</li>
+                            <li>Mentored junior QA team members on automation best practices</li>
+                        </ul>
+                    </div>
+
+                    <h2>Key Achievements</h2>
+                    <ul>
+                        <li>🏆 <strong>Industry Innovation Award</strong> - AI in Quality Engineering (2024)</li>
+                        <li>📈 <strong>60% reduction</strong> in test execution time through AI-driven optimization</li>
+                        <li>🚀 <strong>5.7% increase</strong> in release velocity with improved quality metrics</li>
+                        <li>👥 <strong>Built and scaled</strong> QA organization from 8 to 25+ engineers</li>
+                        <li>💡 <strong>Patent pending</strong> for predictive defect detection algorithm</li>
+                        <li>🎤 <strong>Regular speaker</strong> at major QA and DevOps conferences</li>
                     </ul>
                 </div>
             </div>
-        </section>
 
-        <!-- Slide 5: Plan Around Your Objectives -->
-        <section class="slide w-full max-w-4xl">
-            <div class="slide-content">
-                 <div class="border-l-4 border-[var(--forbes-blue)] pl-6">
-                    <h2 class="text-4xl font-bold">Plan Around your Objectives</h2>
-                </div>
-                <div class="mt-8 text-lg space-y-4 text-[var(--forbes-dark-grey)]">
-                    <div>
-                        <h3 class="font-bold">Project Scope</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>What features needs to be automated</li>
-                            <li>Platform/Environment to be covered</li>
-                        </ul>
+            <aside>
+                <div class="card">
+                    <h2>Core Skills</h2>
+                    
+                    <h3>Leadership</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Strategic Planning</span>
+                        <span class="skill-tag">Team Building</span>
+                        <span class="skill-tag">Stakeholder Management</span>
+                        <span class="skill-tag">Process Optimization</span>
                     </div>
-                    <div>
-                        <h3 class="font-bold">Evaluate Technology Stack</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>Determine Tools/Frameworks</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold">Test Coverage Strategy</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>Outlines which aspects of the application will be tested and to what extent</li>
-                            <li>e.g. Functional, Integration, Regression, performance etc..</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold">Test Data Management</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>Where is test data getting sourced</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold">Integration with CI/CD Pipelines</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>How tests will be triggered, reported and failures are handled.</li>
-                        </ul>
-                    </div>
-                     <div>
-                        <h3 class="font-bold">Monitoring and Maintenance</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>How Test results will be monitored and who will be responsible for maintenance.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 6: Do Not Over-Engineer -->
-        <section class="slide w-full max-w-4xl">
-             <div class="slide-content">
-                 <div class="border-l-4 border-[var(--forbes-blue)] pl-6">
-                    <h2 class="text-4xl font-bold">Do Not Over-Engineer</h2>
-                </div>
-                <div class="mt-8 text-lg space-y-4 text-[var(--forbes-dark-grey)]">
-                    <div>
-                        <h3 class="font-bold">Excessive Abstraction</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>Makes it harder to understand and maintain</li>
-                        </ul>
+                    <h3>AI & Automation</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Predictive Analytics</span>
+                        <span class="skill-tag">Self-Healing Tests</span>
+                        <span class="skill-tag">AI Test Generation</span>
                     </div>
-                    <div>
-                        <h3 class="font-bold">Feature creep</h3>
-                        <ul class="list-disc list-inside ml-4">
-                            <li>Adding feature to testing, which are not essential to project testing needs</li>
-                        </ul>
-                    </div>
-                     <div>
-                        <h3 class="font-bold">Over optimization</h3>
-                        <ul class="list-disc list-inside ml-4">
-                             <li>Spending excessive time optimizing the performance of the framework</li>
-                        </ul>
-                    </div>
-                     <div>
-                        <h3 class="font-bold">Excessive Customization</h3>
-                        <ul class="list-disc list-inside ml-4">
-                             <li>Making bloated configuration interface makes framework more difficult to use.</li>
-                        </ul>
-                    </div>
-                </div>
-                <p class="mt-12 text-2xl font-bold text-center text-[var(--forbes-blue)]">Start with MVP, Add features as needed as project keeps evolving.</p>
-            </div>
-        </section>
-        
-        <!-- Slide 7: The Mission Shift -->
-        <section class="slide w-full max-w-5xl text-center">
-            <div class="slide-content">
-                <h2 class="text-4xl font-bold">The Mission: From QA to Quality Engineering</h2>
-                <p class="mt-4 text-xl text-[var(--forbes-dark-grey)] max-w-3xl mx-auto">We must evolve from being end-of-cycle gatekeepers to proactive enablers who build quality in from day one.</p>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <div class="bg-[var(--forbes-light-grey)] p-8 rounded-sm">
-                        <h3 class="text-2xl font-bold">The Goal</h3>
-                        <ul class="mt-4 space-y-2 text-lg text-[var(--forbes-dark-grey)]">
-                            <li>✔️ Reduce manual testing time</li>
-                            <li>✔️ Get faster, reliable feedback</li>
-                            <li>✔️ Increase release velocity</li>
-                        </ul>
-                    </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-8 rounded-sm">
-                        <h3 class="text-2xl font-bold">The Proof (Forbes Case Study)</h3>
-                         <ul class="mt-4 space-y-2 text-lg text-[var(--forbes-dark-grey)]">
-                            <li><strong class="text-[var(--forbes-blue)]">85%</strong> Reliable Automation Coverage</li>
-                            <li><strong class="text-[var(--forbes-blue)]">20x</strong> Faster Release Cycles</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 8: The Four Pillars Intro -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content text-center">
-                 <h2 class="text-4xl font-bold">The Four Pillars of Scalable Quality</h2>
-                <p class="mt-4 text-xl text-[var(--forbes-dark-grey)] max-w-3xl mx-auto">A modern strategy is a holistic system addressing technology, process, and culture.</p>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-[var(--forbes-white)] border border-gray-200 p-6 rounded-sm text-center">
-                        <h3 class="text-2xl font-bold mt-2">🏛️ The Architectural Foundation</h3>
+                    <h3>Testing</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Test Automation</span>
+                        <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Performance Testing</span>
+                        <span class="skill-tag">API Testing</span>
+                        <span class="skill-tag">Security Testing</span>
                     </div>
-                    <div class="bg-[var(--forbes-white)] border border-gray-200 p-6 rounded-sm text-center">
-                        <h3 class="text-2xl font-bold mt-2">💡 The Intelligence Layer</h3>
-                    </div>
-                    <div class="bg-[var(--forbes-white)] border border-gray-200 p-6 rounded-sm text-center">
-                        <h3 class="text-2xl font-bold mt-2">⚙️ The Engine Room</h3>
-                    </div>
-                     <div class="bg-[var(--forbes-white)] border border-gray-200 p-6 rounded-sm text-center">
-                        <h3 class="text-2xl font-bold mt-2">🤝 The Human Element</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 9: Pillar 1 - Architecture -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content">
-                <h2 class="text-3xl font-bold text-center">Pillar 1: The Architectural Foundation</h2>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="text-left">
-                        <h3 class="text-2xl font-bold">API-First & The Test Pyramid</h3>
-                        <p class="mt-4 text-[var(--forbes-dark-grey)]">Quality starts with testability. An API-first approach creates a testable foundation, while the Test Pyramid guides a smart testing strategy for microservices.</p>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 items-center h-96">
-                        <div class="col-span-2 relative h-full flex flex-col-reverse items-center">
-                            <div class="pyramid-layer w-full h-[30%]" style="background-color: #333333;"></div>
-                            <div class="pyramid-layer w-[85%] h-[25%]" style="background-color: #65B0A0;"></div>
-                            <div class="pyramid-layer w-[70%] h-[20%]" style="background-color: #D77769;"></div>
-                            <div class="pyramid-layer w-[55%] h-[15%]" style="background-color: #B0B0B0;"></div>
-                            <div class="pyramid-layer w-[40%] h-[10%]" style="background-color: #F2B84B;"></div>
-                        </div>
-                        <div class="col-span-1 h-full flex flex-col justify-around text-left space-y-4">
-                            <p class="font-semibold text-sm bg-yellow-200 text-yellow-900 px-3 py-1 rounded-sm">Manual & Exploratory</p>
-                            <p class="font-semibold text-sm bg-gray-300 text-gray-900 px-3 py-1 rounded-sm">UI & API Testing</p>
-                            <p class="font-semibold text-sm bg-red-200 text-red-900 px-3 py-1 rounded-sm">Integration Testing</p>
-                            <p class="font-semibold text-sm bg-teal-200 text-teal-900 px-3 py-1 rounded-sm">Component Testing</p>
-                            <p class="font-semibold text-sm bg-gray-800 text-white px-3 py-1 rounded-sm">Unit Testing</p>
-                        </div>
+                    <h3>Technical</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Selenium</span>
+                        <span class="skill-tag">Cypress</span>
+                        <span class="skill-tag">Jenkins</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Kubernetes</span>
+                        <span class="skill-tag">AWS</span>
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Slide 10: Pillar 2 - Intelligence -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content">
-                <h2 class="text-3xl font-bold text-center">Pillar 2: The Intelligence Layer</h2>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="text-left">
-                        <h3 class="text-2xl font-bold">Supercharging with GenAI</h3>
-                        <p class="mt-4 text-[var(--forbes-dark-grey)]">Generative AI is a force multiplier, automating test creation, predicting risk, and fixing broken tests automatically.</p>
-                        <div class="mt-4 bg-blue-50 border-l-4 border-[var(--forbes-blue)] text-blue-900 p-4">
-                            <p class="font-bold">The Breakthrough: Self-Healing</p>
-                            <p>AI automatically detects and repairs broken tests caused by UI changes, killing brittleness and maintenance costs.</p>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-center font-semibold text-[var(--forbes-dark-grey)] mb-2">GenAI Adoption in QE is Now Mainstream</p>
-                        <div class="chart-container h-80">
-                            <canvas id="genAiChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 11: Interactive GenAI Demo -->
-        <section class="slide w-full max-w-6xl">
-            <div class="slide-content">
-                <h2 class="text-3xl font-bold text-center">From PRD to Test Cases in Seconds</h2>
-                <p class="text-center mt-2 text-gray-600">Save brain power and accelerate test creation by 2x or more.</p>
-                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                    <div class="bg-[var(--forbes-light-grey)] p-4 rounded-sm">
-                        <h3 class="text-xl font-bold mb-2">Product Requirement Doc (PRD)</h3>
-                        <textarea id="prd-input" class="w-full h-80 p-2 border border-gray-300 rounded-sm font-mono text-sm" readonly>
-Feature: User Login
-
-Requirements:
-1. Users must log in with a valid email address and password.
-2. The email field must accept a standard email format (e.g., user@example.com).
-3. The password must be at least 8 characters long.
-4. An error message "Invalid email or password" should be displayed for incorrect credentials.
-5. An error message "Password must be at least 8 characters" should be displayed if the password is too short.
-6. Upon successful login, the user is redirected to the /dashboard page.
-                        </textarea>
+                <div class="card">
+                    <h2>Education</h2>
+                    <div class="education">
+                        <h3>Master of Science</h3>
+                        <div class="company">Computer Science</div>
+                        <div class="date">Stanford University, 2009</div>
                     </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-4 rounded-sm">
-                        <h3 class="text-xl font-bold mb-2">Generated Test Cases</h3>
-                        <div id="test-case-output" class="w-full h-80 p-2 border border-gray-300 rounded-sm bg-white overflow-y-auto">
-                            <div id="loader" class="hidden h-full flex items-center justify-center">
-                                <p class="text-gray-500">Generating with Gemini...</p>
-                            </div>
-                        </div>
+                    <div class="education">
+                        <h3>Bachelor of Engineering</h3>
+                        <div class="company">Software Engineering</div>
+                        <div class="date">MIT, 2007</div>
                     </div>
                 </div>
-                <div class="text-center mt-4">
-                    <button id="generate-btn" class="btn-primary text-lg">Generate Test Cases</button>
-                </div>
-            </div>
-        </section>
 
-        <!-- Slide 12: GitHub Copilot Demo for Playwright -->
-        <section class="slide w-full max-w-6xl">
-            <div class="slide-content">
-                <h2 class="text-3xl font-bold text-center">AI-Powered E2E Testing with Playwright</h2>
-                <p class="text-center mt-2 text-gray-600">Automate browser interactions by generating robust tests from high-level descriptions or existing code.</p>
-                <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                    <div class="bg-[var(--forbes-light-grey)] p-4 rounded-sm">
-                        <h3 class="text-xl font-bold mb-2">The Goal: From Natural Language to Test</h3>
-                        <div class="p-4 bg-white border border-gray-300 rounded-sm">
-                            <p class="font-semibold text-[var(--forbes-blue)]">"Verify a user can add two items to the cart and see the correct total with tax."</p>
-                        </div>
-                        <div class="mt-4">
-                            <h4 class="text-lg font-bold">The Future: Playwright MCP Server</h4>
-                            <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
-                                <li>An AI Agent receives the plain-English command.</li>
-                                <li>The MCP Server provides the Agent with live context of your app's UI components.</li>
-                                <li>The Agent uses this context to autonomously write and execute a Playwright test.</li>
-                                <li><strong>Result:</strong> QA engineers can write code and get a head start.</li>
-                            </ul>
-                        </div>
+                <div class="card">
+                    <h2>Certifications</h2>
+                    <div class="certification">
+                        <strong>AWS Certified Solutions Architect</strong>
+                        <div class="date">2023</div>
                     </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-4 rounded-sm">
-                        <h3 class="text-xl font-bold mb-2">AI-Generated Playwright Test</h3>
-                        <div id="playwright-output" class="w-full h-80 p-2 border border-gray-300 rounded-sm bg-white overflow-y-auto">
-                            <div id="playwright-loader" class="hidden h-full flex items-center justify-center">
-                                <p class="text-gray-500">Generating Playwright Test...</p>
-                            </div>
-                        </div>
+                    <div class="certification">
+                        <strong>ISTQB Advanced Test Manager</strong>
+                        <div class="date">2022</div>
+                    </div>
+                    <div class="certification">
+                        <strong>Certified Scrum Master (CSM)</strong>
+                        <div class="date">2020</div>
                     </div>
                 </div>
-                <div class="text-center mt-4">
-                    <button id="playwright-generate-btn" class="btn-primary text-lg">Generate Playwright Test</button>
+
+                <div class="card">
+                    <h2>Download Resume</h2>
+                    <a href="assets/resume-ronak-ray.pdf" class="btn" style="display: block; text-align: center;">📄 Download PDF</a>
                 </div>
-            </div>
-        </section>
+            </aside>
+        </div>
+    </div>
 
-        <!-- Slide 13: Pillar 3 - Engine Room -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content">
-                <h2 class="text-3xl font-bold text-center">Pillar 3: The Engine Room</h2>
-                 <div class="mt-4 text-center">
-                    <h3 class="text-2xl font-bold">Optimizing the CI/CD Pipeline</h3>
-                    <p class="mt-2 text-[var(--forbes-dark-grey)] max-w-3xl mx-auto">Engineer your pipeline for speed and stability. Use Test Impact Analysis (TIA) to run fewer, smarter tests, then use parallelization to run them faster.</p>
-                </div>
-                <div class="mt-8">
-                     <div class="chart-container h-96">
-                        <canvas id="pipelineChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 14: Pillar 4 - Human Element -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content text-center">
-                <h2 class="text-3xl font-bold">Pillar 4: The Human Element</h2>
-                <p class="mt-4 text-xl text-gray-600">A federated model fosters shared ownership instead of blame.</p>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="text-left">
-                        <h3 class="text-2xl font-bold">Forging a Culture of Shared Quality</h3>
-                        <p class="mt-4 text-[var(--forbes-dark-grey)]">Technology fails without the right culture. "Shift Left" by finding bugs earlier, when they are exponentially cheaper to fix.</p>
-                         <p class="mt-4 text-[var(--forbes-dark-grey)]">Adopt a <strong>Federated Quality Model</strong>: a central QE Center of Excellence builds the platform, empowering product teams to own quality.</p>
-                    </div>
-                    <div>
-                        <p class="text-center font-semibold text-[var(--forbes-dark-grey)] mb-2">The Exponential Cost of a Bug</p>
-                        <div class="chart-container h-80">
-                            <canvas id="bugCostChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 15: The Roadmap -->
-        <section class="slide w-full max-w-4xl">
-            <div class="slide-content">
-                <h2 class="text-4xl font-bold text-center">The Maturity Roadmap</h2>
-                <p class="mt-2 text-center text-gray-500 max-w-3xl mx-auto">Transformation is a journey. Follow this phased roadmap.</p>
-                <div class="mt-12 relative">
-                    <div class="border-l-2 border-[var(--forbes-blue)] absolute h-full top-0 left-4"></div>
-                    <div class="space-y-12 ml-4 pl-12">
-                        <div class="relative">
-                            <div class="absolute -left-16 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-[var(--forbes-blue)] text-white font-bold">1</div>
-                            <h4 class="text-xl font-bold text-[var(--forbes-blue)]">Phase 1: Foundation (Months 1-6)</h4>
-                            <p class="mt-1 text-[var(--forbes-dark-grey)]">Establish QE CoE. Mandate TDD & AI assistant training. Instrument baseline quality metrics.</p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-16 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-[var(--forbes-blue)] text-white font-bold">2</div>
-                            <h4 class="text-xl font-bold text-[var(--forbes-blue)]">Phase 2: Expansion (Months 7-18)</h4>
-                            <p class="mt-1 text-[var(--forbes-dark-grey)]">Roll out federated model to pilot teams. Integrate Test Impact Analysis into CI. QE CoE begins coaching.</p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-16 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-[var(--forbes-blue)] text-white font-bold">3</div>
-                            <h4 class="text-xl font-bold text-[var(--forbes-blue)]">Phase 3: Maturity (Months 18+)</h4>
-                            <p class="mt-1 text-[var(--forbes-dark-grey)]">Full adoption of federated model. Implement AI-driven failure triage. Tie quality metrics to team goals.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Slide 16: Recommendations -->
-        <section class="slide w-full max-w-5xl">
-            <div class="slide-content">
-                <h2 class="text-4xl font-bold text-center">Actionable Recommendations</h2>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm">
-                        <h3 class="text-lg font-bold text-[var(--forbes-blue)]">1. Mandate API-First</h3>
-                        <p class="mt-2 text-[var(--forbes-dark-grey)]">Make the API contract the first artifact of any new feature.</p>
-                    </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm">
-                         <h3 class="text-lg font-bold text-[var(--forbes-blue)]">2. Build a QE CoE</h3>
-                        <p class="mt-2 text-[var(--forbes-dark-grey)]">Restructure QA to be a platform and enablement team.</p>
-                    </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm">
-                         <h3 class="text-lg font-bold text-[var(--forbes-blue)]">3. Launch a GenAI Initiative</h3>
-                        <p class="mt-2 text-[var(--forbes-dark-grey)]">Prioritize self-healing tools and equip all devs with AI assistants.</p>
-                    </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm">
-                         <h3 class="text-lg font-bold text-[var(--forbes-blue)]">4. Implement TIA</h3>
-                        <p class="mt-2 text-[var(--forbes-dark-grey)]">Reduce test volume first, then use gains to fund parallelization.</p>
-                    </div>
-                    <div class="bg-[var(--forbes-light-grey)] p-6 rounded-sm">
-                         <h3 class="text-lg font-bold text-[var(--forbes-blue)]">5. Fund Training</h3>
-                        <p class="mt-2 text-[var(--forbes-dark-grey)]">Invest in a formal training curriculum to drive cultural change.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 17: Q&A -->
-        <section class="slide text-center">
-            <div class="slide-content">
-                <h1 class="text-6xl font-bold">Q&A</h1>
-                 <p class="mt-8 text-xl text-gray-500">Thank You</p>
-                 <div class="mt-8 border-t-4 border-t-[var(--forbes-blue)] w-24 mx-auto"></div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="p-4 bg-white flex items-center justify-between border-t border-gray-200">
-        <button id="prev-btn" class="btn-secondary">Previous</button>
-        <div id="slide-counter" class="text-sm font-semibold text-[var(--forbes-dark-grey)]"></div>
-        <button id="next-btn" class="btn-primary">Next</button>
+    <footer>
+        <p>&copy; 2025 Ronak Ray. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">Built with HTML, CSS, and hosted on GitHub Pages</p>
     </footer>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const progress = document.getElementById('progress');
-    const slideCounter = document.getElementById('slide-counter');
-    let currentSlide = 0;
-    
-    let charts = {};
-    const FORBES_BLUE = '#0057ff';
-    const FORBES_BLACK = '#000000';
-    const FORBES_DARK_GREY = '#333333';
-    const FORBES_MID_GREY = '#666666';
-    const FORBES_LIGHT_GREY = '#f2f2f2';
-
-    const wrapLabel = (str, maxWidth) => {
-        if (!str || str.length <= maxWidth) return str;
-        const words = str.split(' ');
-        let lines = [];
-        let currentLine = '';
-        words.forEach(word => {
-            if ((currentLine + ' ' + word).trim().length > maxWidth) {
-                lines.push(currentLine);
-                currentLine = word;
-            } else {
-                currentLine = (currentLine + ' ' + word).trim();
-            }
-        });
-        if (currentLine) lines.push(currentLine);
-        return lines;
-    };
-
-    const tooltipTitleCallback = (tooltipItems) => {
-        const item = tooltipItems[0];
-        let label = item.chart.data.labels[item.dataIndex];
-        return Array.isArray(label) ? label.join(' ') : label;
-    };
-    
-    const defaultChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 1000, easing: 'easeInOutQuart' },
-        plugins: {
-            legend: { 
-                position: 'bottom', 
-                labels: { 
-                    font: { family: "'Source Sans Pro', sans-serif", size: 12 },
-                    color: FORBES_DARK_GREY
-                } 
-            },
-            tooltip: {
-                callbacks: { title: tooltipTitleCallback },
-                backgroundColor: FORBES_BLACK,
-                titleFont: { family: "'Lora', serif", size: 14, weight: 'bold' },
-                bodyFont: { family: "'Source Sans Pro', sans-serif", size: 12 },
-                padding: 10,
-                cornerRadius: 2
-            }
-        },
-        scales: {
-            x: {
-                ticks: { color: FORBES_MID_GREY, font: { family: "'Source Sans Pro', sans-serif" } },
-                grid: { display: false }
-            },
-            y: {
-                ticks: { color: FORBES_MID_GREY, font: { family: "'Source Sans Pro', sans-serif" } },
-                grid: { color: '#e0e0e0', borderDash: [2, 4] }
-            }
-        }
-    };
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
-        });
-        currentSlide = index;
-        updateControls();
-        renderChartForSlide(index);
-    }
-
-    function updateControls() {
-        prevBtn.disabled = currentSlide === 0;
-        nextBtn.disabled = currentSlide === slides.length - 1;
-        const progressPercentage = (currentSlide / (slides.length - 1)) * 100;
-        progress.style.width = `${progressPercentage}%`;
-        slideCounter.textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
-    }
-    
-    function handleGenerateCases() {
-        const outputDiv = document.getElementById('test-case-output');
-        const loader = document.getElementById('loader');
-        
-        outputDiv.innerHTML = ''; // Clear previous results
-        loader.classList.remove('hidden');
-
-        const testCases = [
-            { type: 'Positive', id: 'TC01', desc: 'Login with valid credentials.', result: 'User redirected to /dashboard.' },
-            { type: 'Negative', id: 'TC02', desc: 'Login with valid email, invalid password.', result: 'Error: "Invalid email or password".' },
-            { type: 'Negative', id: 'TC03', desc: 'Login with invalid email, valid password.', result: 'Error: "Invalid email or password".' },
-            { type: 'Validation', id: 'TC04', desc: 'Login with invalid email format (e.g., "user.com").', result: 'Validation error on email field.' },
-            { type: 'Validation', id: 'TC05', desc: 'Login with password less than 8 characters.', result: 'Error: "Password must be at least 8 characters".' },
-            { type: 'Validation', id: 'TC06', desc: 'Login with empty email field.', result: 'Validation error on email field.' },
-            { type: 'Validation', id: 'TC07', desc: 'Login with empty password field.', result: 'Validation error on password field.' },
-        ];
-        
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            let content = '<dl class="space-y-2 text-sm">';
-            testCases.forEach(tc => {
-                 content += `<dt class="font-bold text-gray-800">${tc.type} - ${tc.id}: ${tc.desc}</dt>`;
-                 content += `<dd class="pl-4 text-gray-600"><strong>Expected:</strong> ${tc.result}</dd>`;
-            });
-            content += '</dl>';
-            outputDiv.innerHTML = content;
-        }, 1500); // Simulate API call
-    }
-    
-    function handlePlaywrightGenerate() {
-        const outputDiv = document.getElementById('playwright-output');
-        const loader = document.getElementById('playwright-loader');
-        
-        outputDiv.innerHTML = '';
-        loader.classList.remove('hidden');
-
-        const generatedCode = `
-<span style="color: #569cd6;">import</span> { test, expect } <span style="color: #569cd6;">from</span> <span style="color: #ce9178;">'@playwright/test'</span>;
-
-test(<span style="color: #ce9178;">'should validate the user login flow'</span>, <span style="color: #c678dd;">async</span> ({ page }) => {
-  <span style="color: #6a9955;">// Navigate to the login page</span>
-  <span style="color: #dcdcaa;">await</span> page.goto(<span style="color: #ce9178;">'/login'</span>);
-
-  <span style="color: #6a9955;">// Enter valid credentials</span>
-  <span style="color: #dcdcaa;">await</span> page.locator(<span style="color: #ce9178;">'#email'</span>).fill(<span style="color: #ce9178;">'user@example.com'</span>);
-  <span style="color: #dcdcaa;">await</span> page.locator(<span style="color: #ce9178;">'#password'</span>).fill(<span style="color: #ce9178;">'password123'</span>);
-  <span style="color: #dcdcaa;">await</span> page.locator(<span style="color: #ce9178;">'button[type="submit"]'</span>).click();
-
-  <span style="color: #6a9955;">// Assert successful login and redirection</span>
-  <span style="color: #dcdcaa;">await</span> expect(page).toHaveURL(<span style="color: #ce9178;">'/dashboard'</span>);
-  <span style="color: #dcdcaa;">await</span> expect(page.locator(<span style="color: #ce9178;">'h1'</span>)).toHaveText(<span style="color: #ce9178;">'Dashboard'</span>);
-});
-        `;
-        
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            outputDiv.innerHTML = `<div class="code-block">${generatedCode}</div>`;
-        }, 1500);
-    }
-
-
-    function renderChartForSlide(index) {
-        const slideId = slides[index].id || `slide-${index}`;
-        if (charts[slideId]) return;
-
-        switch(index) {
-            case 9: // GenAI Chart
-                charts[slideId] = new Chart(document.getElementById('genAiChart').getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: ['Adoption in QE'],
-                        datasets: [{
-                            label: 'GenAI Adoption',
-                            data: [68],
-                            backgroundColor: FORBES_BLUE,
-                            barPercentage: 0.4
-                        },
-                        {
-                            label: 'Remaining',
-                             data: [32],
-                            backgroundColor: FORBES_LIGHT_GREY,
-                            barPercentage: 0.4
-                        }]
-                    },
-                    options: {
-                        ...defaultChartOptions,
-                        indexAxis: 'y',
-                        plugins: {
-                           ...defaultChartOptions.plugins,
-                            legend: {
-                                display: false
-                            },
-                             tooltip: {
-                                ...defaultChartOptions.plugins.tooltip,
-                                callbacks: {
-                                   label: function(context) {
-                                       if(context.datasetIndex === 0)
-                                            return `Adoption: ${context.raw}%`;
-                                       return null;
-                                   }
-                               }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ...defaultChartOptions.scales.x,
-                                stacked: true,
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    ...defaultChartOptions.scales.x.ticks,
-                                    stepSize: 20,
-                                    callback: function(value) {
-                                        return value + '%';
-                                    }
-                                }
-                            },
-                            y: {
-                                ...defaultChartOptions.scales.y,
-                                stacked: true,
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
-                break;
-            case 12: // Pipeline Chart (new index)
-                charts[slideId] = new Chart(document.getElementById('pipelineChart').getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: [wrapLabel('Test Count (Thousands)', 16), wrapLabel('Execution Time (minutes)', 16)],
-                        datasets: [
-                            { label: 'Old Way (Full Regression)', data: [10, 120], backgroundColor: '#B0B0B0' },
-                            { label: 'New Way (TIA + Parallel)', data: [0.5, 2], backgroundColor: FORBES_BLUE }
-                        ]
-                    },
-                    options: {...defaultChartOptions, scales: { ...defaultChartOptions.scales, y: { ...defaultChartOptions.scales.y, type: 'logarithmic', title: { display: true, text: 'Value (Log Scale)' } } } }
-                });
-                break;
-            case 13: // Bug Cost Chart (new index)
-                charts[slideId] = new Chart(document.getElementById('bugCostChart').getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: ['Development', 'CI/Build', 'Staging', 'Production'],
-                        datasets: [{ label: 'Relative Cost to Fix a Bug', data: [1, 10, 100, 1000], borderColor: FORBES_BLUE, backgroundColor: 'rgba(0, 87, 255, 0.1)', fill: true, tension: 0.2 }]
-                    },
-                    options: {...defaultChartOptions, scales: { ...defaultChartOptions.scales, y: { ...defaultChartOptions.scales.y, type: 'logarithmic', title: { display: true, text: 'Relative Cost (Log Scale)' } } } }
-                });
-                break;
-        }
-    }
-    
-    prevBtn.addEventListener('click', () => { if (currentSlide > 0) showSlide(currentSlide - 1); });
-    nextBtn.addEventListener('click', () => { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); });
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
-            showSlide(currentSlide + 1);
-        } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
-            showSlide(currentSlide - 1);
-        }
-    });
-
-    const generateBtn = document.getElementById('generate-btn');
-    if(generateBtn) {
-        generateBtn.addEventListener('click', handleGenerateCases);
-    }
-    
-    const playwrightGenerateBtn = document.getElementById('playwright-generate-btn');
-    if(playwrightGenerateBtn) {
-        playwrightGenerateBtn.addEventListener('click', handlePlaywrightGenerate);
-    }
-
-    showSlide(0);
-});
-</script>
-
 </body>
 </html>
