@@ -12,233 +12,381 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1a1a1a;
+            background: #ffffff;
             min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 40px;
         }
 
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            margin-bottom: 40px;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 40px;
+            margin-bottom: 60px;
         }
 
         h1 {
-            font-size: 3em;
-            color: #667eea;
-            margin-bottom: 10px;
+            font-size: 3.5em;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .title {
-            font-size: 1.5em;
-            color: #764ba2;
-            margin-bottom: 20px;
-            font-weight: 600;
+            font-size: 1.4em;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 400;
         }
 
         .contact-info {
             display: flex;
-            justify-content: center;
             gap: 30px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .contact-info a {
-            color: #667eea;
+            color: #000;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.2s;
+            font-size: 0.95em;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
         }
 
         .contact-info a:hover {
-            color: #764ba2;
+            color: #666;
+            border-bottom-color: #666;
         }
 
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 80px;
+            margin-bottom: 60px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 60px;
         }
 
         h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2em;
-            border-bottom: 3px solid #764ba2;
-            padding-bottom: 10px;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 30px;
+            letter-spacing: -0.01em;
         }
 
         h3 {
-            color: #764ba2;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 1.5em;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #000;
+            margin-top: 30px;
+            margin-bottom: 15px;
         }
 
         .job {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .job:last-child {
+            border-bottom: none;
         }
 
         .job-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            gap: 20px;
         }
 
         .job-title {
             font-weight: 600;
-            color: #333;
-            font-size: 1.2em;
+            color: #000;
+            font-size: 1.15em;
+            line-height: 1.3;
         }
 
         .company {
-            color: #667eea;
-            font-weight: 600;
+            color: #666;
+            font-weight: 500;
+            margin-top: 4px;
         }
 
         .date {
-            color: #666;
-            font-style: italic;
+            color: #999;
+            font-size: 0.9em;
+            white-space: nowrap;
         }
 
         ul {
-            margin-left: 20px;
-            margin-top: 10px;
+            list-style: none;
+            margin-top: 15px;
         }
 
         li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #999;
+            font-weight: bold;
         }
 
         .skills {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-top: 15px;
         }
 
         .skill-tag {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            background: #f5f5f5;
+            color: #333;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.85em;
             font-weight: 500;
+            border: 1px solid #e5e5e5;
+            transition: all 0.2s;
+        }
+
+        .skill-tag:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
         }
 
         .presentations-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 40px;
+            margin-bottom: 60px;
         }
 
         .presentation-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            padding: 25px;
-            border-radius: 15px;
+            background: #fafafa;
+            padding: 30px;
             margin-bottom: 20px;
-            border-left: 5px solid #667eea;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 3px solid #000;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            min-height: 160px;
         }
 
         .presentation-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            background: #f5f5f5;
+            transform: translateX(5px);
+        }
+
+        .presentation-image-container {
+            flex-shrink: 0;
+            width: 200px;
+        }
+
+        .presentation-banner {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .presentation-card:hover .presentation-banner {
+            transform: scale(1.02);
+        }
+
+        .presentation-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .presentation-placeholder {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f0f0f0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            border: 2px dashed #ccc;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            border-left: 4px solid #e74c3c;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .presentation-title {
-            font-size: 1.3em;
-            color: #667eea;
+            font-size: 1.25em;
+            color: #000;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .presentation-meta {
             color: #666;
             font-size: 0.9em;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .presentation-card p {
+            color: #333;
+            line-height: 1.6;
         }
 
         .btn {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
+            background: #000;
+            color: #fff;
+            padding: 12px 28px;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-top: 10px;
+            font-weight: 500;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            margin-top: 15px;
+            border: 2px solid #000;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #fff;
+            color: #000;
         }
 
         .education {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .education:last-child {
+            border-bottom: none;
         }
 
         .certification {
-            background: rgba(102, 126, 234, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            background: #fafafa;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 2px solid #e5e5e5;
+        }
+
+        .certification strong {
+            color: #000;
+            font-weight: 600;
         }
 
         footer {
             text-align: center;
-            color: white;
-            padding: 20px;
-            margin-top: 40px;
+            color: #999;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
             .content-grid {
                 grid-template-columns: 1fr;
+                gap: 40px;
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 2.5em;
+            }
+
+            .container {
+                padding: 40px 20px;
             }
 
             .contact-info {
                 flex-direction: column;
-                gap: 10px;
+                gap: 12px;
+            }
+
+            .job-header {
+                flex-direction: column;
+            }
+
+            .presentation-card {
+                flex-direction: column;
+                min-height: auto;
+                gap: 20px;
+            }
+
+            .presentation-image-container {
+                width: 100%;
+                max-width: 250px;
+                align-self: center;
+            }
+
+            .featured-badge {
+                position: relative;
+                top: auto;
+                right: auto;
+                display: inline-block;
+                margin-bottom: 15px;
+                align-self: flex-start;
             }
         }
 
         .summary {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            line-height: 1.8;
+            background: #fafafa;
+            padding: 25px;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+            line-height: 1.7;
+            color: #333;
+            border-left: 3px solid #000;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 40px;
+            align-self: start;
         }
     </style>
 </head>
@@ -248,35 +396,56 @@
             <h1>Ronak Ray</h1>
             <div class="title">Vice President of QA & AI Strategy</div>
             <div class="contact-info">
-                <a href="mailto:ronak.ray@example.com">📧 ronak.ray@example.com</a>
+                <a href="mailto:ronak.ray@example.com">📧 knockronak@gmail.com</a>
                 <a href="https://linkedin.com/in/ronakray" target="_blank">💼 LinkedIn</a>
                 <a href="https://github.com/rronakk" target="_blank">💻 GitHub</a>
-                <a href="tel:+1234567890">📱 +1 (234) 567-8900</a>
             </div>
         </header>
 
         <section class="presentations-section">
-            <h2>📊 Featured Presentations & Talks</h2>
+            <h2>Featured Presentations</h2>
             
-            <div class="presentation-card">
-                <div class="presentation-title">What AI Can Do, What Testers Must Do: Partnering with AI in Automation</div>
-                <div class="presentation-meta">📅 2025 • 🏢 Industry Conference • ⏱️ 45 minutes</div>
-                <p>Exploring the evolving role of QA professionals in the AI era, focusing on practical strategies for human-AI collaboration in test automation.</p>
-                <a href="presentations/ai-testing-talk.html" class="btn">View Presentation →</a>
+            <div class="presentation-card featured-card">
+                <div class="featured-badge">Featured</div>
+                <div class="presentation-image-container">
+                    <img src="assets/images/testflix-banner.png" alt="TestFlix 2025 Conference Banner" class="presentation-banner">
+                </div>
+                <div class="presentation-content">
+                    <div class="presentation-title">What AI Can Do, What Testers Must Do: Partnering with AI in Automation</div>
+                    <div class="presentation-meta">2025 • Testflix • 45 minutes</div>
+                    <p>Exploring the evolving role of QA professionals in the AI era, focusing on practical strategies for human-AI collaboration in test automation.</p>
+                    <a href="presentations/ai-testing-talk.html" class="btn">View Presentation →</a>
+                </div>
             </div>
 
             <div class="presentation-card">
-                <div class="presentation-title">Building Quality at Scale: CI/CD Best Practices</div>
-                <div class="presentation-meta">📅 2024 • 🏢 DevOps Summit • ⏱️ 30 minutes</div>
-                <p>Strategies for implementing robust testing pipelines that enable rapid deployment without compromising quality.</p>
-                <a href="presentations/cicd-best-practices.html" class="btn">View Presentation →</a>
+                <div class="presentation-image-container">
+                    <img src="assets/images/test-tribe-nyc.jpg" alt="Test Tribe NYC meetup Banner" class="presentation-banner">
+                </div>
+                <div class="presentation-content">
+                    <div class="presentation-title">The Scalable Quality Blueprint</div>
+                    <div class="presentation-meta">2025 • DevOps Summit • 30 minutes</div>
+                    <p>Architecting Next-Generation Test Automation.</p>
+                    <a href="presentations/quality-blueprint.html" class="btn">View Presentation →</a>
+                </div>
             </div>
 
             <div class="presentation-card">
-                <div class="presentation-title">The Future of Test Automation: AI & Machine Learning</div>
-                <div class="presentation-meta">📅 2024 • 🏢 QA Tech Conference • ⏱️ 60 minutes</div>
-                <p>Deep dive into emerging AI technologies transforming software testing, with real-world case studies from Forbes.</p>
-                <a href="presentations/future-automation.html" class="btn">View Presentation →</a>
+                <div class="presentation-image-container">
+                    <div class="presentation-placeholder">
+                        <div>
+                            🤖<br>
+                            AI & ML<br>
+                            Testing
+                        </div>
+                    </div>
+                </div>
+                <div class="presentation-content">
+                    <div class="presentation-title">The Future of Test Automation: AI & Machine Learning</div>
+                    <div class="presentation-meta">2026 • QA Tech Conference • 60 minutes</div>
+                    <p>Deep dive into emerging AI technologies transforming software testing, with real-world case studies from Forbes.</p>
+                    <a href="presentations/future-automation.html" class="btn">View Presentation →</a>
+                </div>
             </div>
         </section>
 
@@ -285,7 +454,7 @@
                 <div class="card">
                     <h2>Professional Summary</h2>
                     <div class="summary">
-                        Strategic technology leader with 15+ years of experience driving quality assurance excellence and AI innovation in high-scale digital media environments. Proven track record of transforming QA organizations, implementing cutting-edge automation frameworks, and leading cross-functional teams to deliver exceptional software quality. Expert in bridging technical execution with business strategy.
+                        Results-driven technical leader with over 14 years of experience specializing in quality engineering, AI strategy, and product innovation. Proven track record of building and scaling high-performing teams, driving test automation coverage to 85%, and reducing production incidents by 30% through AI-powered testing solutions. Skilled at transforming QA organizations and aligning technical solutions with strategic business objectives to enhance product quality and accelerate delivery. Track record of delivering 70-80% improvement in overall product reliability and boosting end-user satisfaction scores by 50% through comprehensive quality strategy.
                     </div>
 
                     <h2>Professional Experience</h2>
@@ -293,156 +462,290 @@
                     <div class="job">
                         <div class="job-header">
                             <div>
-                                <div class="job-title">Vice President of QA & AI Strategy</div>
-                                <div class="company">Forbes Media</div>
+                                <div class="job-title">Vice President, QA & AI Strategy</div>
+                                <div class="company">Forbes Media, Jersey City, NJ</div>
                             </div>
-                            <div class="date">2020 - Present</div>
+                            <div class="date">May 2025 - Present</div>
                         </div>
                         <ul>
-                            <li>Lead enterprise-wide QA transformation initiative serving 150M+ monthly users</li>
-                            <li>Architected and implemented AI-driven test automation framework, achieving 60% reduction in test execution time</li>
-                            <li>Increased release velocity by 5.7% while maintaining zero critical production defects</li>
-                            <li>Built and mentor a team of 25+ QA engineers across multiple global locations</li>
-                            <li>Established predictive quality analytics platform using ML models to identify high-risk code changes</li>
-                            <li>Drove adoption of self-healing test automation, reducing maintenance overhead by 40%</li>
+                            <li>Define and execute Forbes' internal AI strategy across all departments to improve AI adoption and unlock productivity and efficiency organization-wide</li>
+                            <li>Led inception and creation of AI roadmap covering variety of use cases across different business units</li>
+                            <li>Conducted AI training sessions, familiarizing teams with Google Gemini and Microsoft Copilot LLM agents</li>
+                            <li>Architected AI-powered QA center of excellence, training 35+ engineers on AI tools and methodologies, reducing test creation time by 50%</li>
+                            <li>Rolled out AI-powered test case generation tool across QA department, boosting team morale and productivity</li>
                         </ul>
                     </div>
 
                     <div class="job">
                         <div class="job-header">
                             <div>
-                                <div class="job-title">Director of Quality Engineering</div>
-                                <div class="company">Digital Media Company</div>
+                                <div class="job-title">Vice President, QA & Technical Project Management</div>
+                                <div class="company">Forbes Media, Jersey City, NJ</div>
                             </div>
-                            <div class="date">2016 - 2020</div>
+                            <div class="date">July 2023 - April 2025</div>
                         </div>
                         <ul>
-                            <li>Transformed manual testing processes to 80% automated testing coverage</li>
-                            <li>Implemented continuous testing practices within CI/CD pipelines</li>
-                            <li>Reduced average defect escape rate by 65% through enhanced quality gates</li>
-                            <li>Led API testing strategy across 50+ microservices architecture</li>
-                            <li>Championed shift-left testing culture across engineering organization</li>
+                            <li>Scaled team to 35 quality engineers and technical project managers while maintaining quality standards</li>
+                            <li>Spearheaded enterprise-wide Agile transformation following Scrum methodology across the organization</li>
+                            <li>Implemented modern Playwright-based automation framework, increasing automated test coverage to 85%</li>
+                            <li>Reduced regression testing cycles by 70% through comprehensive automation strategy</li>
+                            <li>Transformed release cadence from 2 to 60 weekly deployments through CI/CD integration and shift-left testing</li>
                         </ul>
                     </div>
 
                     <div class="job">
                         <div class="job-header">
                             <div>
-                                <div class="job-title">Senior QA Manager</div>
-                                <div class="company">Technology Solutions Inc.</div>
+                                <div class="job-title">Vice President, Quality Assurance</div>
+                                <div class="company">Forbes Media, Jersey City, NJ</div>
                             </div>
-                            <div class="date">2012 - 2016</div>
+                            <div class="date">November 2021 - June 2023</div>
                         </div>
                         <ul>
-                            <li>Managed QA team of 15 engineers for enterprise SaaS platform</li>
-                            <li>Designed and implemented comprehensive test automation framework using Selenium and Python</li>
-                            <li>Established performance testing practice, identifying critical bottlenecks before production</li>
-                            <li>Collaborated with product and engineering teams to define quality metrics and SLAs</li>
+                            <li>Directed enterprise-wide quality strategy, achieving 80% improvement in product reliability</li>
+                            <li>Increased end-user satisfaction scores by 50% by implementing advanced performance, security, and usability testing</li>
+                            <li>Established standardized KPIs and dashboards to monitor defect trends, test coverage, and release health</li>
+                            <li>Mentored QA leadership team and fostered culture of continuous improvement across engineering organization</li>
                         </ul>
                     </div>
 
                     <div class="job">
                         <div class="job-header">
                             <div>
-                                <div class="job-title">QA Automation Engineer</div>
-                                <div class="company">Software Innovations LLC</div>
+                                <div class="job-title">Senior Director, Quality Assurance</div>
+                                <div class="company">Forbes Media, Jersey City, NJ</div>
                             </div>
-                            <div class="date">2009 - 2012</div>
+                            <div class="date">January 2021 - October 2021</div>
                         </div>
                         <ul>
-                            <li>Developed automated test suites for web and mobile applications</li>
-                            <li>Created reusable testing frameworks and libraries</li>
-                            <li>Mentored junior QA team members on automation best practices</li>
+                            <li>Implemented CI/CD workflow across all projects, adding 6 levels of tests in pipeline before production rollout</li>
+                            <li>Launched cross-functional QA guild to standardize best practices and tools across the organization</li>
+                            <li>Partnered with engineering leads on reliability improvements, reducing critical production defects by 60%</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Director, Quality Assurance</div>
+                                <div class="company">Forbes Media, Jersey City, NJ</div>
+                            </div>
+                            <div class="date">January 2019 - December 2020</div>
+                        </div>
+                        <ul>
+                            <li>Built quality assurance practice from ground up, scaling QA organization from 5 to 20 engineers</li>
+                            <li>Established core processes and automation frameworks while maintaining high quality standards</li>
+                            <li>Implemented shift-left testing and risk-based QA approaches, decreasing time-to-market by 25%</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Quality Advocate</div>
+                                <div class="company">World Wide Technology, New York, NY</div>
+                            </div>
+                            <div class="date">July 2018 - December 2018</div>
+                        </div>
+                        <ul>
+                            <li>Led cohort of quality advocates championing QA best practices and mentoring engineers across organization</li>
+                            <li>Designed and implemented automated API testing framework using Kotlin, KotlinTest, and RestAssured</li>
+                            <li>Established dashboards and KPIs to monitor test execution, track defect trends, and assess product readiness</li>
+                            <li>Conducted performance testing using Locust to ensure scalability and reliability of systems</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Tech Lead</div>
+                                <div class="company">Mastercard, New York, NY</div>
+                            </div>
+                            <div class="date">April 2018 - July 2018</div>
+                        </div>
+                        <ul>
+                            <li>Served as Test Architect and Technical Lead for team of seven Software Development Engineers in Test (SDETs)</li>
+                            <li>Architected and delivered comprehensive end-to-end test automation framework using Java and Selenium</li>
+                            <li>Reduced manual testing effort by 60% through strategic automation implementation</li>
+                            <li>Embedded QA checkpoints into pull request process to enforce shift-left quality practices</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Test Engineering Manager</div>
+                                <div class="company">MediaMath Inc., New York, NY</div>
+                            </div>
+                            <div class="date">December 2014 - April 2018</div>
+                        </div>
+                        <ul>
+                            <li>Led team of test engineers developing and maintaining Python-based UI automation frameworks using Page Object Model and Pytest</li>
+                            <li>Containerized Selenium Grid using Docker for scalable, parallel cross-browser testing across multiple environments</li>
+                            <li>Configured and maintained Jenkins CI/CD pipelines to support continuous integration testing, driving actionable steps toward a robust CI/CD pipeline</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Product Test Engineer II</div>
+                                <div class="company">ICIMS Inc., Matawan, NJ</div>
+                            </div>
+                            <div class="date">January 2012 - December 2014</div>
+                        </div>
+                        <ul>
+                            <li>Served as QA team lead, responsible for authoring comprehensive test plans and reviewing test cases</li>
+                            <li>Developed and executed UI automation suites using Java and Selenium for enterprise applications</li>
+                            <li>Managed JIRA server configuration to streamline defect tracking and reporting processes</li>
+                        </ul>
+                    </div>
+
+                    <div class="job">
+                        <div class="job-header">
+                            <div>
+                                <div class="job-title">Automation Engineer</div>
+                                <div class="company">Urbandaddy Inc., New York, NY</div>
+                            </div>
+                            <div class="date">March 2011 - January 2012</div>
+                        </div>
+                        <ul>
+                            <li>Developed end-to-end tests for core web applications using Selenium WebDriver</li>
+                            <li>Performed functional, GUI, and integration testing to ensure release quality and user experience standards</li>
                         </ul>
                     </div>
 
                     <h2>Key Achievements</h2>
                     <ul>
-                        <li>🏆 <strong>Industry Innovation Award</strong> - AI in Quality Engineering (2024)</li>
-                        <li>📈 <strong>60% reduction</strong> in test execution time through AI-driven optimization</li>
-                        <li>🚀 <strong>5.7% increase</strong> in release velocity with improved quality metrics</li>
-                        <li>👥 <strong>Built and scaled</strong> QA organization from 8 to 25+ engineers</li>
-                        <li>💡 <strong>Patent pending</strong> for predictive defect detection algorithm</li>
-                        <li>🎤 <strong>Regular speaker</strong> at major QA and DevOps conferences</li>
+                        <li><strong>Team Leadership:</strong> Successfully scaled QA organizations from 5 to 35+ engineers across multiple companies</li>
+                        <li><strong>AI Innovation:</strong> Pioneered AI-powered testing solutions, achieving 50% reduction in test creation time</li>
+                        <li><strong>Automation Excellence:</strong> Drove test automation coverage to 85%, reducing regression cycles by 70%</li>
+                        <li><strong>Quality Improvement:</strong> Delivered 80% improvement in product reliability and 60% reduction in critical defects</li>
+                        <li><strong>Process Transformation:</strong> Increased deployment frequency from 2 to 60 weekly releases through CI/CD optimization</li>
+                        <li><strong>Business Impact:</strong> Improved end-user satisfaction scores by 50% through comprehensive quality strategy</li>
+                        <li><strong>Industry Recognition:</strong> Regular speaker at major QA and DevOps conferences, including TestFlix 2025</li>
                     </ul>
                 </div>
             </div>
 
-            <aside>
+            <aside class="sidebar">
                 <div class="card">
                     <h2>Core Skills</h2>
                     
-                    <h3>Leadership</h3>
+                    <h3>Leadership & Strategy</h3>
                     <div class="skills">
-                        <span class="skill-tag">Strategic Planning</span>
+                        <span class="skill-tag">Executive Leadership</span>
                         <span class="skill-tag">Team Building</span>
                         <span class="skill-tag">Stakeholder Management</span>
-                        <span class="skill-tag">Process Optimization</span>
+                        <span class="skill-tag">Strategic Planning</span>
+                        <span class="skill-tag">AI/ML Strategy</span>
+                        <span class="skill-tag">Agile Transformation</span>
+                        <span class="skill-tag">Budget Management</span>
                     </div>
 
-                    <h3>AI & Automation</h3>
-                    <div class="skills">
-                        <span class="skill-tag">Machine Learning</span>
-                        <span class="skill-tag">Predictive Analytics</span>
-                        <span class="skill-tag">Self-Healing Tests</span>
-                        <span class="skill-tag">AI Test Generation</span>
-                    </div>
-
-                    <h3>Testing</h3>
+                    <h3>Quality Engineering</h3>
                     <div class="skills">
                         <span class="skill-tag">Test Automation</span>
-                        <span class="skill-tag">CI/CD</span>
                         <span class="skill-tag">Performance Testing</span>
-                        <span class="skill-tag">API Testing</span>
                         <span class="skill-tag">Security Testing</span>
+                        <span class="skill-tag">CI/CD Integration</span>
+                        <span class="skill-tag">Shift-Left Methodologies</span>
+                        <span class="skill-tag">API Testing</span>
+                        <span class="skill-tag">End-to-End Testing</span>
+                        <span class="skill-tag">Quality Metrics & KPIs</span>
                     </div>
 
-                    <h3>Technical</h3>
+                    <h3>Programming & Automation</h3>
                     <div class="skills">
                         <span class="skill-tag">Python</span>
                         <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">Selenium</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Kotlin</span>
+                        <span class="skill-tag">Playwright</span>
+                        <span class="skill-tag">Selenium WebDriver</span>
                         <span class="skill-tag">Cypress</span>
+                        <span class="skill-tag">Pytest</span>
+                        <span class="skill-tag">RestAssured</span>
+                        <span class="skill-tag">Locust</span>
+                        <span class="skill-tag">KotlinTest</span>
+                        <span class="skill-tag">Mocha</span>
+                        <span class="skill-tag">Jasmine</span>
+                        <span class="skill-tag">Cucumber</span>
+                    </div>
+
+                    <h3>Tools & Infrastructure</h3>
+                    <div class="skills">
                         <span class="skill-tag">Jenkins</span>
+                        <span class="skill-tag">ArgoCD</span>
+                        <span class="skill-tag">CircleCI</span>
+                        <span class="skill-tag">GitLab CI</span>
+                        <span class="skill-tag">GitHub Actions</span>
+                        <span class="skill-tag">Google Cloud Platform</span>
+                        <span class="skill-tag">AWS</span>
                         <span class="skill-tag">Docker</span>
                         <span class="skill-tag">Kubernetes</span>
-                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">JIRA</span>
+                        <span class="skill-tag">Monday.com</span>
+                    </div>
+
+                    <h3>Methodologies</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Scrum</span>
+                        <span class="skill-tag">Kanban</span>
+                        <span class="skill-tag">Agile</span>
+                        <span class="skill-tag">DevOps</span>
                     </div>
                 </div>
 
                 <div class="card">
                     <h2>Education</h2>
                     <div class="education">
-                        <h3>Master of Science</h3>
-                        <div class="company">Computer Science</div>
-                        <div class="date">Stanford University, 2009</div>
+                        <h3>Engineering Leadership Certificate</h3>
+                        <div class="company">Cornell University</div>
+                        <div class="date">June 2021 - September 2021</div>
                     </div>
                     <div class="education">
-                        <h3>Bachelor of Engineering</h3>
-                        <div class="company">Software Engineering</div>
-                        <div class="date">MIT, 2007</div>
+                        <h3>Computer Science (Non-credit course on JAVA)</h3>
+                        <div class="company">New York University</div>
+                        <div class="date">2014</div>
+                        <div style="margin-top: 8px; color: #666; font-size: 0.9em;">Grade: A</div>
+                    </div>
+                    <div class="education">
+                        <h3>Master's Degree, Computer Networks</h3>
+                        <div class="company">San José State University</div>
+                        <div class="date">2009 - 2010</div>
+                    </div>
+                    <div class="education">
+                        <h3>Bachelor's Degree, Electrical and Electronics Engineering</h3>
+                        <div class="company">Sardar Vallabhbhai Patel Institute of Technology (Gujarat University)</div>
+                        <div class="date">2004 - 2008</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <h2>Certifications</h2>
                     <div class="certification">
-                        <strong>AWS Certified Solutions Architect</strong>
-                        <div class="date">2023</div>
+                        <strong>ICAgile Certified Professional - Leading with Agility</strong>
+                        <div class="company">ICAgile</div>
+                        <div class="date">November 2023</div>
+                        <div style="margin-top: 4px; color: #999; font-size: 0.85em;">Credential ID: 4-40475-aa207175-704d-4650-a7ad-c3e53a9f512a</div>
+                        <div style="margin-top: 6px; color: #666; font-size: 0.9em;">Skills: Agile leader • Agile Leadership • Agile Methodologies</div>
                     </div>
                     <div class="certification">
-                        <strong>ISTQB Advanced Test Manager</strong>
-                        <div class="date">2022</div>
+                        <strong>Leading with Agility</strong>
+                        <div class="company">ICAgile</div>
+                        <div class="date">November 2023</div>
                     </div>
                     <div class="certification">
-                        <strong>Certified Scrum Master (CSM)</strong>
-                        <div class="date">2020</div>
+                        <strong>Preventing Workplace Harassment</strong>
+                        <div class="company">Emtrain</div>
+                        <div class="date">Completed</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <h2>Download Resume</h2>
-                    <a href="assets/resume-ronak-ray.pdf" class="btn" style="display: block; text-align: center;">📄 Download PDF</a>
+                    <a href="assets/Ronak_ray_resume.pdf" class="btn" style="display: block; text-align: center; width: 100%;">Download PDF</a>
                 </div>
             </aside>
         </div>
@@ -450,7 +753,7 @@
 
     <footer>
         <p>&copy; 2025 Ronak Ray. All rights reserved.</p>
-        <p style="margin-top: 10px; font-size: 0.9em;">Built with HTML, CSS, and hosted on GitHub Pages</p>
+        <p style="margin-top: 8px;">Built with HTML & CSS</p>
     </footer>
 </body>
 </html>

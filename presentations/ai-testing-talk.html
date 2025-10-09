@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What AI Can Do, What Testers Must Do</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 4rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: scale(0.98);
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle at 1px 1px, #27272a 1px, transparent 0);
+            background-size: 2rem 2rem;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+        .slide-content {
+            width: 100%;
+            max-width: 1200px;
+        }
+        .speaker-notes {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(10, 10, 10, 0.95);
+            color: #94a3b8;
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #334155;
+            max-height: 40vh;
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            z-index: 100;
+        }
+        .speaker-notes-toggle {
+            position: fixed;
+            bottom: 1rem;
+            right: 6rem;
+            z-index: 101;
+        }
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            transition: width 0.3s ease-out;
+            z-index: 50;
+        }
+        .nav-button {
+            position: fixed;
+            bottom: 1rem;
+            transform: translateY(-50%);
+            background-color: rgba(30, 41, 59, 0.7);
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            border-radius: 9999px;
+            width: 2.75rem;
+            height: 2.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 50;
+        }
+        .nav-button:hover {
+            background-color: #334155;
+            border-color: #64748b;
+            transform: translateY(-50%) scale(1.1);
+        }
+        #prev-slide { right: 9rem; bottom: 0.2rem; }
+        #next-slide { right: 5rem; bottom: 0.2rem; }
+        .slide-counter {
+            position: fixed;
+            bottom: 1.25rem;
+            left: 2rem;
+            font-size: 0.875rem;
+            color: #94a3b8;
+            background-color: rgba(30, 41, 59, 0.7);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            border: 1px solid #475569;
+            z-index: 50;
+        }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, #e0e7ff, #c7d2fe, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #f1f5f9;
+            border-left: 4px solid #818cf8;
+            padding-left: 1rem;
+        }
+        .part-divider {
+            text-align: center;
+            margin: 4rem 0;
+        }
+        .part-divider h2 {
+            display: inline-block;
+            border-left: none;
+            padding-left: 0;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 0.5rem;
+        }
+        li { margin-bottom: 0.75rem; }
+        .grid-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .grid-card:hover {
+            transform: translateY(-5px);
+            border-color: #4f46e5;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- SLIDES CONTAINER -->
+    <main id="presentation-container">
+
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <div class="slide-content text-center">
+                <span class="text-lg font-semibold text-sky-400 tracking-widest uppercase">AI in Automation</span>
+                <h1 class="mt-4 mb-6">What AI Can Do, What Testers Must Do</h1>
+                <p class="text-2xl text-slate-300 max-w-4xl mx-auto">Partnering with AI in Automation</p>
+                <div class="mt-12 border-t border-slate-700 pt-6 max-w-md mx-auto">
+                     <p class="text-xl text-slate-200 flex items-center justify-center gap-3">
+                        <i data-lucide="user-circle"></i>
+                        Ronak Ray
+                    </p>
+                    <p class="text-md text-slate-400">Vice President of QA & AI Strategy — Forbes</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "AI is transforming how we test software — but transformation doesn't mean replacement. Today, I'll talk about where AI truly adds value and where testers remain irreplaceable."
+            </div>
+        </div>
+
+        <!-- Slide 2: Why This Talk, Why Now -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Why This Talk, Why Now?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg">
+                    <div class="space-y-6">
+                        <p class="text-2xl text-slate-300 font-semibold">The New Reality:</p>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-slate-300">
+                            <li>AI is flooding software engineering.</li>
+                            <li>Testing is under immense disruption.</li>
+                            <li><strong class="text-cyan-400">66% of DevOps teams</strong> are using or plan to use AI within 12 months.</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 rounded-lg border border-slate-700 bg-slate-900/50">
+                        <div class="flex items-center gap-4 mb-4">
+                            <i data-lucide="swords" class="text-red-500 w-10 h-10"></i>
+                            <p class="text-2xl font-bold text-red-500">Myth: AI replaces testers.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="shield-check" class="text-green-500 w-10 h-10"></i>
+                            <p class="text-2xl font-bold text-green-500">Truth: AI empowers testers who evolve.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "This isn't a future trend—it's happening right now. The central question isn't 'Will AI take my job?' The real question is 'How do I partner with AI to do my job better than ever before?' We've seen this before — recorders didn't replace musicians, spreadsheets didn't replace accountants. AI won't replace testers; it will amplify them."
+            </div>
+        </div>
+        
+        <!-- Slide 3: The Shift in Software Testing -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The Grand Shift in Software Testing</h2>
+                 <div class="text-center space-y-8">
+                     <div class="flex justify-center items-center gap-8 text-xl">
+                        <span class="p-4 rounded-lg bg-slate-800 border border-slate-700">⚙️ Manual</span>
+                        <i data-lucide="arrow-right" class="text-indigo-400 w-12 h-12"></i>
+                        <span class="p-4 rounded-lg bg-slate-800 border border-slate-700">⚙️ Automation</span>
+                        <i data-lucide="arrow-right" class="text-indigo-400 w-12 h-12"></i>
+                        <span class="p-4 rounded-lg bg-indigo-900/50 border border-indigo-700 text-white font-bold">🧠 AI-Augmented QA</span>
+                    </div>
+                     <div class="flex justify-center items-center gap-8 text-xl">
+                        <span class="p-4 rounded-lg bg-slate-800 border border-slate-700">Deterministic</span>
+                        <i data-lucide="arrow-right" class="text-purple-400 w-12 h-12"></i>
+                        <span class="p-4 rounded-lg bg-purple-900/50 border border-purple-700 text-white font-bold">Probabilistic</span>
+                    </div>
+                    <div class="mt-8 pt-8 border-t border-slate-700 max-w-4xl mx-auto">
+                        <p class="text-2xl text-slate-300 font-semibold">Core Message:</p>
+                        <p class="text-xl text-slate-400 mt-2">We're moving from brittle scripts to intelligent, adaptive systems. As building gets faster, validation gets harder, and testing becomes the deterministic checkpoint in a non-deterministic world.</p>
+                    </div>
+                 </div>
+            </div>
+             <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "For years, we've dealt with rigid, fragile scripts that demand constant maintenance. That era is ending. When AI writes code instantly, our bottleneck becomes validation. We're in the middle of a paradigm shift toward intelligent systems."
+            </div>
+        </div>
+
+        <!-- PART 1 DIVIDER -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <p class="text-lg font-semibold text-sky-400 tracking-widest uppercase">Part 1</p>
+                <h2 class="inline-block border-b-2 border-sky-400 pb-2 border-l-0 pl-0">What AI Can Do Well Today</h2>
+            </div>
+        </div>
+
+        <!-- Slide 4: The AI Arsenal -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The AI Arsenal: Augmenting the Testing Lifecycle</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid-card"><i data-lucide="file-check-2" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Intelligent Test Generation</h3><p class="text-slate-400 text-sm">Parse requirements from Jira/Figma to auto-generate test cases.</p></div>
+                    <div class="grid-card"><i data-lucide="wrench" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Self-Healing Automation</h3><p class="text-slate-400 text-sm">Adapts to UI changes in real-time, reducing script maintenance.</p></div>
+                    <div class="grid-card"><i data-lucide="search" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Predictive Defect Analysis</h3><p class="text-slate-400 text-sm">Analyzes historical data to predict bug-prone areas.</p></div>
+                    <div class="grid-card"><i data-lucide="image" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Advanced Visual Validation</h3><p class="text-slate-400 text-sm">Computer vision detects meaningful UI regressions.</p></div>
+                    <div class="grid-card"><i data-lucide="database" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Synthetic Test Data Generation</h3><p class="text-slate-400 text-sm">Creates realistic, privacy-safe data at scale.</p></div>
+                    <div class="grid-card"><i data-lucide="siren" class="w-8 h-8 mb-3 text-sky-400"></i><h3 class="font-bold text-lg text-white">Test Optimization</h3><p class="text-slate-400 text-sm">Identifies redundancies and optimizes scheduling.</p></div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Think of AI as an arsenal of specialized tools. It can read our user stories and draft test cases. It tackles the nightmare of script maintenance. It acts like a fortune teller, pointing to risky code areas. It validates UIs with human-like nuance and generates complex test data without exposing sensitive information."
+            </div>
+        </div>
+        
+        <!-- Slide 5: Deep Dive: Self-Healing -->
+        <div class="slide">
+             <div class="slide-content">
+                <h2>Deep Dive: Why Self-Healing is Your Best First Step</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold text-red-400 flex items-center gap-2"><i data-lucide="alert-triangle"></i>The Problem</h3>
+                            <p class="text-slate-300 mt-2">Traditional scripts are fragile. A minor UI change breaks them, creating a huge maintenance burden.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-green-400 flex items-center gap-2"><i data-lucide="sparkles"></i>The AI Solution</h3>
+                            <p class="text-slate-300 mt-2">AI watches for changes during test runs. When an element's locator is modified, AI finds the new one and allows tests to continue without manual intervention.</p>
+                        </div>
+                    </div>
+                     <div class="p-8 rounded-lg border-2 border-indigo-500 bg-indigo-900/20 shadow-lg shadow-indigo-500/10">
+                         <h3 class="text-2xl font-bold text-white flex items-center gap-3"><i data-lucide="dollar-sign"></i>The Business Case</h3>
+                         <ul class="mt-4 space-y-3 text-slate-300 list-disc list-inside">
+                             <li>Measurable reduction in engineering hours.</li>
+                             <li>Immediate and undeniable ROI.</li>
+                             <li>Builds crucial trust in AI.</li>
+                             <li>Funds further investment.</li>
+                         </ul>
+                     </div>
+                </div>
+            </div>
+             <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "If you're wondering where to start, start here. The constant pain of flaky tests is universal. Self-healing provides a clear, quantifiable win. You can tell your manager, 'We saved 50 hours this month on test maintenance.' That success story is your gateway to exploring everything else AI offers."
+            </div>
+        </div>
+        
+        <!-- Slide 6: What AI Can't Do -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>What AI Can't (Yet) Do</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                    <div class="grid-card p-6"><i data-lucide="target" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Understand business intent</p></div>
+                    <div class="grid-card p-6"><i data-lucide="gem" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Judge what matters vs what just passes</p></div>
+                    <div class="grid-card p-6"><i data-lucide="smile-plus" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Detect UX friction or emotional quality</p></div>
+                    <div class="grid-card p-6"><i data-lucide="git-fork" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Handle ambiguity, bias, or ethics</p></div>
+                    <div class="grid-card p-6"><i data-lucide="compass" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Provide strategic direction</p></div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "AI doesn't understand why something matters. It predicts patterns — it doesn't assess impact or risk. An AI can confirm a button works, but only a human can determine if the overall experience is intuitive and delightful."
+            </div>
+        </div>
+
+        <!-- PART 2 DIVIDER -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <p class="text-lg font-semibold text-purple-400 tracking-widest uppercase">Part 2</p>
+                <h2 class="inline-block border-b-2 border-purple-400 pb-2 border-l-0 pl-0">What Testers Must Own</h2>
+            </div>
+        </div>
+
+        <!-- Slide 7: Tester's Evolving Mandate -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The Tester's Evolving Mandate: From Executor to Strategist</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-300">Repetitive</h3>
+                        <i data-lucide="arrow-down" class="w-10 h-10 mx-auto my-4 text-purple-400"></i>
+                        <h3 class="text-xl font-bold text-purple-300">Exploratory</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-300">Execution</h3>
+                        <i data-lucide="arrow-down" class="w-10 h-10 mx-auto my-4 text-purple-400"></i>
+                        <h3 class="text-xl font-bold text-purple-300">Strategy</h3>
+                    </div>
+                     <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-300">Functionality</h3>
+                        <i data-lucide="arrow-down" class="w-10 h-10 mx-auto my-4 text-purple-400"></i>
+                        <h3 class="text-xl font-bold text-purple-300">User Experience</h3>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-slate-700 max-w-3xl mx-auto text-center">
+                    <h3 class="text-2xl font-semibold text-white">Your New Role: The AI "Manager" & "Trainer"</h3>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Our value proposition changes dramatically. We're no longer just executors. We are quality strategists. We're the explorers who go off-script. We're the guardians of user experience. Think of yourself as managing a highly efficient AI assistant — you provide strategic direction and domain knowledge; AI provides the speed."
+            </div>
+        </div>
+        
+        <!-- Slide 8: What Testers Must Still Own -->
+        <div class="slide">
+            <div class="slide-content">
+                 <h2>What Testers Must Still Own</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                    <div class="grid-card p-6"><i data-lucide="brain-circuit" class="w-10 h-10 mx-auto mb-4 text-purple-400"></i><p>Critical thinking & risk assessment</p></div>
+                    <div class="grid-card p-6"><i data-lucide="list-ordered" class="w-10 h-10 mx-auto mb-4 text-purple-400"></i><p>Contextual prioritization</p></div>
+                    <div class="grid-card p-6"><i data-lucide="clipboard-check" class="w-10 h-10 mx-auto mb-4 text-purple-400"></i><p>Validating results against business goals</p></div>
+                    <div class="grid-card p-6"><i data-lucide="shield" class="w-10 h-10 mx-auto mb-4 text-purple-400"></i><p>Ethical and governance oversight</p></div>
+                    <div class="grid-card p-6"><i data-lucide="briefcase" class="w-10 h-10 mx-auto mb-4 text-purple-400"></i><p>Domain expertise & business context</p></div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Testers are still the conscience of quality — the ones ensuring that what passes tests truly serves users and business needs. Your domain expertise is your superpower in the age of AI."
+            </div>
+        </div>
+
+        <!-- Slide 9: High-Demand Skillset -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The High-Demand Skillset for the AI Era</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-bold text-xl text-sky-300 mb-4 flex items-center gap-2"><i data-lucide="cpu"></i>Technical Skills</h3>
+                        <ul class="list-disc list-inside space-y-2"><li>Prompt Engineering</li><li>Data Literacy</li></ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-amber-300 mb-4 flex items-center gap-2"><i data-lucide="lightbulb"></i>Strategic Skills</h3>
+                        <ul class="list-disc list-inside space-y-2"><li>Domain Expertise</li><li>Critical Thinking</li></ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-emerald-300 mb-4 flex items-center gap-2"><i data-lucide="trending-up"></i>Essential Mindset</h3>
+                        <ul class="list-disc list-inside space-y-2"><li>Adaptability</li><li>Continuous Learning</li></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "To thrive, evolve your skills. You don't need to become a data scientist. Learn to 'talk' to AI through prompt engineering. Become comfortable analyzing data. But most importantly, amplify what you already have: deep business knowledge and critical thinking."
+            </div>
+        </div>
+
+        <!-- PART 3 DIVIDER -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <p class="text-lg font-semibold text-green-400 tracking-widest uppercase">Part 3</p>
+                <h2 class="inline-block border-b-2 border-green-400 pb-2 border-l-0 pl-0">How to Partner Effectively</h2>
+            </div>
+        </div>
+
+        <!-- Slide 10: Paired Testing Model -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The "Paired Testing" Model: Human + AI</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid-card border-green-600">
+                        <h3 class="text-2xl font-bold text-green-300 mb-4 flex items-center gap-3"><i data-lucide="bot"></i>AI is the "Driver"</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-300">
+                            <li>Rapidly generates test scripts & data</li>
+                            <li>Executes thousands of tests in parallel</li>
+                            <li>Handles low-level technical details</li>
+                        </ul>
+                    </div>
+                    <div class="grid-card border-sky-600">
+                        <h3 class="text-2xl font-bold text-sky-300 mb-4 flex items-center gap-3"><i data-lucide="user"></i>Human is the "Navigator"</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-300">
+                            <li>Sets strategic direction & testing goals</li>
+                            <li>Observes AI execution & interprets results</li>
+                            <li>Uses expertise to investigate anomalies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "How does this partnership work in practice? Let's call it 'Paired Testing.' The AI is the driver, with hands on the keyboard, executing at incredible speed. We are the navigators, providing strategic direction, watching results, and making the final call on quality. This is continuous co-evolution."
+            </div>
+        </div>
+        
+        <!-- Slide 11: Partnership Framework -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Partnership Framework</h2>
+                 <div class="grid grid-cols-2 gap-0 text-center text-lg max-w-4xl mx-auto rounded-lg overflow-hidden border border-slate-700">
+                     <div class="bg-green-900/40 p-4 font-bold text-green-300">AI Can Do</div>
+                     <div class="bg-sky-900/40 p-4 font-bold text-sky-300">Tester Must Do</div>
+                     <div class="bg-slate-800/50 p-4 border-t border-slate-700">Generate tests</div>
+                     <div class="bg-slate-800/50 p-4 border-t border-slate-700">Validate relevance</div>
+                     <div class="bg-slate-900/50 p-4 border-t border-slate-700">Write automation</div>
+                     <div class="bg-slate-900/50 p-4 border-t border-slate-700">Ensure maintainability</div>
+                     <div class="bg-slate-800/50 p-4 border-t border-slate-700">Find anomalies</div>
+                     <div class="bg-slate-800/50 p-4 border-t border-slate-700">Interpret impact</div>
+                     <div class="bg-slate-900/50 p-4 border-t border-slate-700">Suggest next steps</div>
+                     <div class="bg-slate-900/50 p-4 border-t border-slate-700">Choose what matters</div>
+                 </div>
+                 <div class="mt-8 text-center max-w-2xl mx-auto p-4 border border-amber-500/50 bg-amber-900/20 rounded-lg">
+                     <p class="font-semibold text-amber-300 text-xl">Key Insight: AI is like a junior tester — fast but inexperienced. It needs human mentorship and validation.</p>
+                 </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Think of AI as a co-pilot, not an autopilot. It can optimize routes, but you still need someone steering. AI provides speed; humans provide wisdom."
+            </div>
+        </div>
+
+        <!-- Slide 12: Case Study -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Case Study: Parallelization at Scale (Forbes)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-300">The Challenge:</h3>
+                        <p class="text-slate-400">A growing regression suite was becoming a major bottleneck in our CI/CD pipeline, slowing down releases.</p>
+                        <h3 class="text-xl font-semibold mt-6 mb-4 text-slate-300">The AI-Assisted Strategy:</h3>
+                        <p class="text-slate-400">We paired human strategy (Navigator) with AI execution (Driver) to optimize, prioritize, and run tests at massive scale.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="grid-card border-green-500 p-6"><span class="text-4xl font-bold text-green-400 block">🚀 60%</span><span class="text-slate-300">Faster Runs</span></div>
+                        <div class="grid-card border-green-500 p-6"><span class="text-4xl font-bold text-green-400 block">📈 5.7%</span><span class="text-slate-300">Higher Velocity</span></div>
+                        <div class="grid-card border-green-500 p-6"><span class="text-4xl font-bold text-green-400 block">✅ 100%</span><span class="text-slate-300">Coverage Kept</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Let me make this concrete with Forbes. Our test suite was becoming a monster. We applied the Paired Testing model. As navigators, we set the strategy. The AI did the heavy lifting—optimizing, prioritizing, and running tests at a scale we couldn't manage manually. The result? Higher-quality software, delivered faster."
+            </div>
+        </div>
+
+        <!-- PART 4 DIVIDER -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <p class="text-lg font-semibold text-orange-400 tracking-widest uppercase">Part 4</p>
+                <h2 class="inline-block border-b-2 border-orange-400 pb-2 border-l-0 pl-0">Your Actionable Framework</h2>
+            </div>
+        </div>
+
+        <!-- Slide 13: Getting Started -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Getting Started on Your AI Journey</h2>
+                 <div class="flex items-center justify-center space-x-4">
+                    <div class="grid-card text-center p-6 w-1/4">
+                        <div class="text-4xl font-bold text-orange-400 mb-2">1</div>
+                        <h3 class="font-semibold text-white">Assess & Identify</h3>
+                        <p class="text-xs text-slate-400 mt-1">Find your biggest bottleneck.</p>
+                    </div>
+                     <i data-lucide="chevrons-right" class="w-10 h-10 text-slate-600"></i>
+                    <div class="grid-card text-center p-6 w-1/4">
+                        <div class="text-4xl font-bold text-orange-400 mb-2">2</div>
+                        <h3 class="font-semibold text-white">Start a Pilot</h3>
+                        <p class="text-xs text-slate-400 mt-1">Pick one high-impact area for a quick win.</p>
+                    </div>
+                     <i data-lucide="chevrons-right" class="w-10 h-10 text-slate-600"></i>
+                    <div class="grid-card text-center p-6 w-1/4">
+                        <div class="text-4xl font-bold text-orange-400 mb-2">3</div>
+                        <h3 class="font-semibold text-white">Build Data Foundation</h3>
+                        <p class="text-xs text-slate-400 mt-1">Centralize test results, defects, and logs.</p>
+                    </div>
+                     <i data-lucide="chevrons-right" class="w-10 h-10 text-slate-600"></i>
+                    <div class="grid-card text-center p-6 w-1/4">
+                        <div class="text-4xl font-bold text-orange-400 mb-2">4</div>
+                        <h3 class="font-semibold text-white">Train & Scale</h3>
+                        <p class="text-xs text-slate-400 mt-1">Upskill your team and expand.</p>
+                    </div>
+                 </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "You can start this journey next week. Find your single biggest pain point. For many, that's test maintenance. Run a pilot on self-healing. Prove the value. That success gives you momentum to build your data foundation, train your teams, and scale from there."
+            </div>
+        </div>
+
+        <!-- Slide 14: AI Maturity Model -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>AI Maturity Model</h2>
+                <div class="grid grid-cols-3 gap-8 text-center">
+                    <div class="p-6 rounded-lg bg-slate-800/50">
+                        <h3 class="text-2xl font-bold text-orange-300">AI-Assisted</h3>
+                        <p class="text-sm text-slate-400 mt-2">Tool-level (Copilot, Gemini)</p>
+                    </div>
+                    <div class="p-6 rounded-lg bg-slate-800/50">
+                        <h3 class="text-2xl font-bold text-orange-300">AI-Augmented</h3>
+                        <p class="text-sm text-slate-400 mt-2">Integrated into pipelines (CI/CD Anomaly Detection)</p>
+                    </div>
+                    <div class="p-6 rounded-lg bg-slate-800/50">
+                        <h3 class="text-2xl font-bold text-orange-300">AI-Integrated</h3>
+                        <p class="text-sm text-slate-400 mt-2">Autonomous systems (Self-healing orchestration)</p>
+                    </div>
+                </div>
+                 <div class="mt-8 text-center">
+                     <p class="font-semibold text-lg text-orange-200">Recommendation: Start at assisted, progress toward integrated — don't jump straight to autonomy.</p>
+                 </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "The most successful teams start small. Pick a repetitive workflow, experiment, measure, and expand. Don't aim for full autonomy on day one."
+            </div>
+        </div>
+        
+        <!-- Slide 15: Metrics That Matter -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Metrics That Matter</h2>
+                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 text-center">
+                    <div class="grid-card p-4"><i data-lucide="bot" class="w-8 h-8 mx-auto mb-2 text-orange-400"></i><p>AI Contribution Rate</p></div>
+                    <div class="grid-card p-4"><i data-lucide="zap" class="w-8 h-8 mx-auto mb-2 text-orange-400"></i><p>Cycle Time Reduction</p></div>
+                    <div class="grid-card p-4"><i data-lucide="shield-check" class="w-8 h-8 mx-auto mb-2 text-orange-400"></i><p>Coverage Confidence</p></div>
+                    <div class="grid-card p-4"><i data-lucide="bar-chart-2" class="w-8 h-8 mx-auto mb-2 text-orange-400"></i><p>AI Suggestion Accuracy</p></div>
+                    <div class="grid-card p-4"><i data-lucide="clock" class="w-8 h-8 mx-auto mb-2 text-orange-400"></i><p>Engineering Hours Saved</p></div>
+                </div>
+                 <div class="mt-8 text-center max-w-2xl mx-auto p-4 border border-slate-700 bg-slate-900/50 rounded-lg">
+                     <p class="font-semibold text-lg text-slate-200">Key Point: Success isn't just about test pass rate — it's about measuring AI-human synergy.</p>
+                 </div>
+            </div>
+             <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Track the right things. Don't just measure pass/fail rates. Measure the partnership's effectiveness."
+            </div>
+        </div>
+
+        <!-- Slide 16: Pitfalls to Avoid -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Pitfalls to Avoid</h2>
+                 <div class="grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                    <div class="grid-card border-red-500/50 p-6"><i data-lucide="eye-off" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Blind trust in AI</p></div>
+                    <div class="grid-card border-red-500/50 p-6"><i data-lucide="thought-bubble" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Using AI as a shortcut for thinking</p></div>
+                    <div class="grid-card border-red-500/50 p-6"><i data-lucide="trash-2" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Poor data hygiene</p></div>
+                    <div class="grid-card border-red-500/50 p-6"><i data-lucide="repeat" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Ignoring reproducibility</p></div>
+                    <div class="grid-card border-red-500/50 p-6"><i data-lucide="skip-forward" class="w-10 h-10 mx-auto mb-4 text-red-400"></i><p>Skipping the pilot phase</p></div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "The fastest way to fail with AI is to stop thinking critically. Use it as an accelerator, not an excuse. Clean data is essential. Start small and prove value before scaling."
+            </div>
+        </div>
+        
+        <!-- Slide 17: Redefining the Tester -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <h2>Redefining the Tester</h2>
+                <p class="text-3xl text-slate-300 font-semibold mb-8">From Bug Hunter <i data-lucide="arrow-right" class="inline w-8 h-8 mx-2"></i> Quality Strategist</p>
+                <div class="flex flex-wrap justify-center gap-4 text-lg">
+                    <span class="bg-indigo-900/50 text-indigo-200 px-4 py-2 rounded-full border border-indigo-700">Coach AI, don't compete</span>
+                    <span class="bg-indigo-900/50 text-indigo-200 px-4 py-2 rounded-full border border-indigo-700">Focus on system quality</span>
+                    <span class="bg-indigo-900/50 text-indigo-200 px-4 py-2 rounded-full border border-indigo-700">Elevate judgment & ethics</span>
+                    <span class="bg-indigo-900/50 text-indigo-200 px-4 py-2 rounded-full border border-indigo-700">Become an AI orchestrator</span>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "The modern tester becomes an AI orchestrator — someone who ensures quality at scale, responsibly. We're moving up the value chain."
+            </div>
+        </div>
+
+        <!-- Slide 18: The New QA Formula -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <h2>The New QA Formula</h2>
+                 <div class="text-4xl font-bold my-10 flex justify-center items-center gap-6">
+                    <span class="text-sky-300">(AI Speed</span>
+                    <i data-lucide="x" class="text-slate-400"></i>
+                    <span class="text-purple-300">Tester Judgment)</span>
+                    <i data-lucide="equal" class="text-slate-400"></i>
+                    <span class="text-green-300">Quality at Scale</span>
+                 </div>
+                 <h3 class="text-2xl font-semibold mb-4 text-slate-200">Your Path Forward:</h3>
+                 <div class="flex flex-wrap justify-center gap-4">
+                     <span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-md">🧭 Embrace augmentation</span>
+                     <span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-md">🔍 Redefine metrics</span>
+                     <span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-md">🤝 Build literacy & guardrails</span>
+                     <span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-md">🏁 Lead AI adoption</span>
+                 </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "This is the new partnership model — speed meets sense. That's the future of testing. We're not being replaced; we're being elevated."
+            </div>
+        </div>
+        
+        <!-- Slide 19: Key Takeaways -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Key Takeaways</h2>
+                <div class="space-y-6 max-w-4xl mx-auto text-xl">
+                    <div class="grid-card p-5 flex items-start gap-4"><div class="p-2 bg-sky-900/50 border border-sky-700 rounded-md"><i data-lucide="cpu" class="w-8 h-8 text-sky-400"></i></div><div><strong class="text-white">AI is an Augment, Not a Replacement.</strong> The goal is a human-AI partnership.</div></div>
+                    <div class="grid-card p-5 flex items-start gap-4"><div class="p-2 bg-purple-900/50 border border-purple-700 rounded-md"><i data-lucide="lightbulb" class="w-8 h-8 text-purple-400"></i></div><div><strong class="text-white">Your Role Becomes More Strategic.</strong> Move from execution to strategy and user experience.</div></div>
+                    <div class="grid-card p-5 flex items-start gap-4"><div class="p-2 bg-green-900/50 border border-green-700 rounded-md"><i data-lucide="users" class="w-8 h-8 text-green-400"></i></div><div><strong class="text-white">Partner Using "Paired Testing".</strong> Be the strategic "navigator" to AI's "driver."</div></div>
+                    <div class="grid-card p-5 flex items-start gap-4"><div class="p-2 bg-orange-900/50 border border-orange-700 rounded-md"><i data-lucide="rocket" class="w-8 h-8 text-orange-400"></i></div><div><strong class="text-white">Start Small, Prove Value, Scale.</strong> Begin with a focused pilot to build momentum.</div></div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "To wrap up: First, stop thinking about replacement and start thinking about augmentation. Second, recognize your value is shifting up the chain. Third, embrace the Paired Testing model. Finally, don't get overwhelmed. Start small, get a win, and build from there. The future of our profession is incredibly exciting."
+            </div>
+        </div>
+
+        <!-- Slide 20: Closing Quote & Q&A -->
+        <div class="slide">
+            <div class="slide-content text-center">
+                <blockquote class="text-3xl italic text-slate-300 border-l-4 border-indigo-500 pl-6 max-w-3xl mx-auto">
+                    "AI won't replace testers. But testers who embrace AI will replace those who don't."
+                </blockquote>
+                <div class="mt-16">
+                    <p class="text-5xl font-bold text-white mb-4">✨ Thank You</p>
+                    <p class="text-2xl text-slate-400 mb-8">Questions?</p>
+                    <p class="text-lg text-slate-300 flex items-center justify-center gap-3"><i data-lucide="linkedin"></i> /in/ronakray</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> "Testing isn't disappearing — it's evolving. The ones who thrive will be those who partner intelligently with AI. Thank you, and I'm happy to take your questions."
+            </div>
+        </div>
+
+    </main>
+
+    <!-- UI ELEMENTS -->
+    <div id="progress-bar"></div>
+    <div class="slide-counter" id="slide-counter">1 / 20</div>
+    <button id="prev-slide" class="nav-button"><i data-lucide="arrow-left"></i></button>
+    <button id="next-slide" class="nav-button"><i data-lucide="arrow-right"></i></button>
+    <button id="speaker-notes-toggle" class="nav-button right-24" title="Toggle Speaker Notes (S)"><i data-lucide="clipboard-list"></i></button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progress-bar');
+            const slideCounter = document.getElementById('slide-counter');
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            const notesToggle = document.getElementById('speaker-notes-toggle');
+
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function updatePresentation() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                        // Hide/show notes for the current slide
+                        const notes = slide.querySelector('.speaker-notes');
+                        if (notes && notes.style.display === 'block') {
+                            notes.style.display = 'block';
+                        }
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+                
+                // Hide all other notes
+                document.querySelectorAll('.speaker-notes').forEach((notes, index) => {
+                     if (index !== currentSlide && notes.style.display === 'block') {
+                         notes.style.display = 'none';
+                     }
+                });
+
+                const progress = ((currentSlide + 1) / totalSlides) * 100;
+                progressBar.style.width = `${progress}%`;
+                slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === totalSlides - 1;
+                prevButton.style.opacity = currentSlide === 0 ? '0.5' : '1';
+                nextButton.style.opacity = currentSlide === totalSlides - 1 ? '0.5' : '1';
+                prevButton.style.cursor = currentSlide === 0 ? 'not-allowed' : 'pointer';
+                nextButton.style.cursor = currentSlide === totalSlides - 1 ? 'not-allowed' : 'pointer';
+
+                 // Re-initialize icons for the new active slide if they aren't rendered
+                lucide.createIcons({
+                    nodes: [slides[currentSlide]]
+                });
+            }
+
+            function showNextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updatePresentation();
+                }
+            }
+
+            function showPrevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updatePresentation();
+                }
+            }
+
+            function toggleNotes() {
+                const notes = slides[currentSlide].querySelector('.speaker-notes');
+                if (notes) {
+                    notes.style.display = notes.style.display === 'block' ? 'none' : 'block';
+                }
+            }
+
+            nextButton.addEventListener('click', showNextSlide);
+            prevButton.addEventListener('click', showPrevSlide);
+            notesToggle.addEventListener('click', toggleNotes);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    showNextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    showPrevSlide();
+                } else if (e.key.toLowerCase() === 's') {
+                    toggleNotes();
+                }
+            });
+
+            updatePresentation();
+        });
+    </script>
+</body>
+</html>
